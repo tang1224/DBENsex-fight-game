@@ -45,10 +45,6 @@
             font-size: 22px;
             font-weight: 700;
             color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
         }
         
         .status-container {
@@ -72,33 +68,12 @@
             font-size: 16px;
             font-weight: 700;
             margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
         
         .bars { display: flex; flex-direction: column; gap: 10px; }
-        
-        .bar-label {
-            font-size: 12px;
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 3px;
-        }
-        
-        .bar-outer {
-            height: 18px;
-            background: #16121f;
-            border-radius: 9999px;
-            overflow: hidden;
-            border: 2px solid rgba(255,255,255,0.1);
-        }
-        
-        .bar-inner {
-            height: 100%;
-            transition: width 0.4s ease;
-            border-radius: 9999px;
-        }
+        .bar-label { font-size: 12px; display: flex; justify-content: space-between; margin-bottom: 3px; }
+        .bar-outer { height: 18px; background: #16121f; border-radius: 9999px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); }
+        .bar-inner { height: 100%; transition: width 0.4s ease; border-radius: 9999px; }
         
         .stamina-bar { background: linear-gradient(90deg, #7fb8a8, #a3d9c9); }
         .pleasure-bar { background: linear-gradient(90deg, #ff4d94, #ff99cc); }
@@ -106,7 +81,6 @@
         .pleasure-bar.warning {
             animation: pulse 800ms infinite alternate;
         }
-        
         @keyframes pulse {
             from { box-shadow: 0 0 8px #ff4d94; }
             to { box-shadow: 0 0 20px #ff4d94; }
@@ -149,6 +123,7 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.2s;
+            position: relative;
         }
         
         .skill-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255,77,77,0.4); }
@@ -203,9 +178,9 @@
         <header>🔥 性愛格鬥 🔥<br>轟燈矢（攻） vs 轟炎司（受）</header>
         
         <div class="status-container">
-            <!-- 轟燈矢（你・攻） -->
+            <!-- 轟燈矢（你） -->
             <div class="player-panel">
-                <div class="name">轟燈矢 🔥<span style="font-size:14px;margin-left:8px;">👤</span></div>
+                <div class="name">轟燈矢 🔥 👤</div>
                 <div class="bars">
                     <div class="bar-group">
                         <div class="bar-label"><span>體力</span><span id="p-hp-text">100/100</span></div>
@@ -218,9 +193,9 @@
                 </div>
             </div>
             
-            <!-- 轟炎司（老爸・受） -->
+            <!-- 轟炎司 -->
             <div class="enemy-panel">
-                <div class="name">轟炎司 💥<span style="font-size:14px;margin-left:8px;">👔</span></div>
+                <div class="name">轟炎司 💥 👔</div>
                 <div class="bars">
                     <div class="bar-group">
                         <div class="bar-label"><span>體力</span><span id="e-hp-text">100/100</span></div>
@@ -235,7 +210,6 @@
         </div>
         
         <div id="log" class="log-container"></div>
-        
         <div id="skills-grid" class="skills-grid"></div>
     </div>
 
@@ -251,7 +225,7 @@
                 <div>轟炎司 最終：體力 <span id="final-e-hp"></span>　快感 <span id="final-e-pleasure"></span></div>
             </div>
             
-            <button onclick="restartGame()" class="restart">🔄 再來一局 操死老爸</button>
+            <button onclick="restartGame()" class="restart">🔄 再來一局</button>
         </div>
     </div>
 
@@ -264,36 +238,36 @@
         let pCooldown = new Array(6).fill(0);
         let eCooldown = new Array(6).fill(0);
 
-        // 轟燈矢（兒子・攻）的病嬌男同骨科技能
+        // 轟燈矢（攻）的技能
         const playerSkills = [
             {id:0, name:"深喉老爸", shortDesc:"消耗14體力，對方+30快感", cost:14, oppD:30, selfD:8, hpR:0, cd:0,
-             flavors:["你跪在老爸面前，病態地深喉他的粗大肉棒，舌頭狂纏：「老爸…你是我的…不准射給別人…」","你用力吸吮到喉嚨深處，眼睛發紅盯著老爸：「我要讓你只記得兒子的嘴巴…」"]},
+             flavors:["你跪在老爸面前用力深喉他的粗屌，病嬌低語：「老爸…你是我的…」","你把老爸的肉棒吞到喉嚨深處，眼睛發紅地吸吮。"]},
             {id:1, name:"手指玩前列腺", shortDesc:"消耗16體力，對方+38快感", cost:16, oppD:38, selfD:10, hpR:0, cd:0,
-             flavors:["你把手指插進老爸緊熱的後穴，精準抠挖前列腺，病嬌低語：「老爸…這裡是兒子的專屬…不准給別人碰…」","手指快速抽插老爸的G點，你笑得陰沉：「被兒子玩到噴水…好可愛…」"]},
-            {id:2, name:"夾緊後穴狂幹", shortDesc:"消耗18體力，對方+48快感（自+15）", cost:18, oppD:48, selfD:15, hpR:0, cd:1,
-             flavors:["你跨坐在老爸身上，用力夾緊後穴猛套他的肉棒，病嬌呢喃：「老爸…你的雞巴只能被我幹…我要操壞你…」","後穴死死咬住老爸的粗屌，你紅著眼：「不准射出去…全部射在兒子裡面…」"]},
+             flavors:["你把手指插進老爸後穴，猛摳前列腺：「老爸…這裡是我的專屬…」","手指快速抽插，老爸的後穴不停收縮。"]},
+            {id:2, name:"打屁股狂幹", shortDesc:"消耗18體力，對方+48快感（自+15）", cost:18, oppD:48, selfD:15, hpR:0, cd:1,
+             flavors:["你用力打老爸屁股留下鮮紅巴掌印，同時猛插後穴：「老爸…你的屁股好紅…」","啪啪的打屁股聲響起，老爸被打得又紅又腫，你繼續狂幹。"]},
             {id:3, name:"騎乘位爆插", shortDesc:"消耗24體力，對方+58快感", cost:24, oppD:58, selfD:18, hpR:0, cd:0,
-             flavors:["你主動騎上去瘋狂套弄，病嬌低吼：「老爸…被兒子騎乘的感覺…是不是很爽？不准反抗我…」","騎乘位讓你完全掌控，你笑得扭曲：「老爸的後穴…從今天起就是兒子的專屬肉便器…」"]},
+             flavors:["你騎在老爸身上瘋狂上下套弄，邊打他胸口邊插：「老爸…被兒子騎的感覺如何？」","你用力壓著老爸胸部猛幹。"]},
             {id:4, name:"火焰SM", shortDesc:"消耗35體力，對方+82快感（冷卻4）", cost:35, oppD:82, selfD:25, hpR:0, cd:4,
-             flavors:["你用自己的火焰在老爸身上畫出淫紋，一邊猛插後穴一邊燒…「老爸…火焰對你來說只是小case吧？那就好好享受兒子的SM…」","火焰SM讓老爸全身發燙，你病嬌地笑：「老爸…被兒子用火玩弄…還敢硬著？我要燒壞你…」"]},
+             flavors:["你用火焰在老爸屁股和胸口畫出淫紋，一邊猛幹一邊燒：「老爸…火焰對你只是小case吧？那就好好被兒子玩…」","火焰SM讓老爸全身發燙，你笑得病嬌。"]},
             {id:5, name:"喘息恢復", shortDesc:"恢復40體力，-30快感（冷卻3）", cost:0, oppD:0, selfD:-30, hpR:40, cd:3,
-             flavors:["你深呼吸壓下快感，眼睛依然死盯著老爸：「還沒操夠…老爸還不能壞掉…」","你暫時放緩動作，病嬌低語：「老爸…你只能被我一個人幹壞…」"]}
+             flavors:["你深呼吸壓下快感，繼續用病嬌眼神盯著老爸：「還沒玩夠…」"]}
         ];
 
-        // 轟炎司（老爸・受）的反擊技能
+        // 轟炎司（受）的技能
         const enemySkills = [
-            {id:0, name:"粗暴揉兒子", shortDesc:"消耗12體力，對方+28快感", cost:12, oppD:28, selfD:6, hpR:0, cd:0,
-             flavors:["轟炎司大手用力揉你的肉棒，喘息道：「不孝子…爸爸要教訓你…」","他低頭吸咬你的乳頭，火焰熱度讓你全身發燙。"]},
-            {id:1, name:"手指猛摳前列腺", shortDesc:"消耗15體力，對方+36快感", cost:15, oppD:36, selfD:9, hpR:0, cd:0,
-             flavors:["老爸粗暴地把手指插進你後穴，狂摳你的前列腺…「這裡是不是很爽？兒子！」","他手指彎曲猛幹你的G點，你差點腿軟。"]},
-            {id:2, name:"猛幹兒子後穴💥", shortDesc:"消耗22體力，對方+50快感（冷卻1）", cost:22, oppD:50, selfD:12, hpR:0, cd:1,
-             flavors:["轟炎司從後面狠狠插入，一手掐著你的脖子猛幹…「不孝子！爸爸要幹穿你！」","後入位讓他插得極深，每一下都撞到你最敏感的地方。"]},
-            {id:3, name:"壓制狂幹", shortDesc:"消耗26體力，對方+60快感", cost:26, oppD:60, selfD:16, hpR:0, cd:0,
-             flavors:["他把你壓在身下粗暴抽插…「燈矢…爸爸要射滿你的腸道！」","老爸用火焰般的熱度貫穿你，你只能抓著床單浪叫。"]},
-            {id:4, name:"極限爆射大招", shortDesc:"消耗40體力，對方+90快感（冷卻5）", cost:40, oppD:90, selfD:30, hpR:0, cd:5,
-             flavors:["轟炎司徹底失控，把你雙腿扛在肩上極限狂幹…「兒子！爸爸要射死你了！！」","大招發動，你被老爸幹得眼前發白。"]},
-            {id:5, name:"英雄冷卻", shortDesc:"恢復42體力，-35快感（冷卻2）", cost:0, oppD:0, selfD:-35, hpR:42, cd:2,
-             flavors:["轟炎司深呼吸，英雄氣概回歸…「還沒結束，爸爸要繼續懲罰你。」","他暫時壓下快感，火焰鬍子重新燃起。"]}
+            {id:0, name:"小穴縮緊", shortDesc:"消耗12體力，對方+28快感", cost:12, oppD:28, selfD:6, hpR:0, cd:0,
+             flavors:["轟炎司羞恥地用力縮緊後穴，死死夾住你的肉棒…","老爸的後穴突然劇烈收縮，讓你爽得腰發軟。"]},
+            {id:1, name:"扭腰承受", shortDesc:"消耗15體力，對方+36快感", cost:15, oppD:36, selfD:9, hpR:0, cd:0,
+             flavors:["老爸被插得忍不住扭腰，後穴不停收縮…","轟炎司咬唇，屁股無意識地往後頂。"]},
+            {id:2, name:"羞恥縮穴", shortDesc:"消耗22體力，對方+50快感（冷卻1）", cost:22, oppD:50, selfD:12, hpR:0, cd:1,
+             flavors:["老爸全身通紅，後穴劇烈痙攣收縮：「燈矢…太深了…」","被幹得小穴不停抽動，老爸的聲音都變調了。"]},
+            {id:3, name:"被動後入", shortDesc:"消耗26體力，對方+60快感", cost:26, oppD:60, selfD:16, hpR:0, cd:0,
+             flavors:["老爸被你從後面猛幹，只能抓著床單默默承受…","轟炎司的後穴又濕又熱，被插得不停收縮。"]},
+            {id:4, name:"極限高潮", shortDesc:"消耗40體力，對方+90快感（冷卻5）", cost:40, oppD:90, selfD:30, hpR:0, cd:5,
+             flavors:["老爸徹底被你幹到極限，後穴狂縮，全身劇烈痙攣…"]},
+            {id:5, name:"英雄喘息", shortDesc:"恢復42體力，-35快感（冷卻2）", cost:0, oppD:0, selfD:-35, hpR:42, cd:2,
+             flavors:["轟炎司努力壓下快感，後穴依然微微抽動…"]}
         ];
 
         function log(html) {
@@ -386,20 +360,16 @@
             
             if (pPleasure >= 100) {
                 title = "😩 你輸了…高潮了";
-                resultText = `轟炎司抱緊全身痙攣的你，溫柔地親吻你的額頭，低聲呢喃：<br>
-                「燈矢…兒子的精液終於回家了…爸爸的子宮（雖然是想像的）好滿…好溫暖…爸爸好高興你回來了…❤️」`;
+                resultText = `轟炎司抱著你，低聲說：<br>「燈矢…兒子的精液回家了…爸爸好滿足…」`;
             } else if (ePleasure >= 100) {
-                title = "🎉 你贏了！操死老爸";
-                resultText = `轟炎司高潮了！他全身發抖，羞恥地紅著臉對你說：<br>
-                「不孝子…老爸居然被自己的親生兒子幹到高潮…好愧疚…好羞恥…但…屁股被你幹得太爽了…爸爸壞掉了…」`;
+                title = "🎉 你贏了！操壞老爸";
+                resultText = `轟炎司高潮了！他羞恥地發抖：<br>「不孝子…老爸被自己兒子幹到高潮…好羞恥…後穴都壞掉了…」`;
             } else if (pHP <= 0) {
                 title = "😩 你輸了…累趴";
-                resultText = `你徹底累癱，老爸溫柔地把你抱在懷裡，輕撫你的頭髮：<br>
-                「燈矢…累壞了吧？兒子的精液已經全部射進爸爸體內…爸爸好滿足…好高興你回家了…❤️」`;
+                resultText = `你累癱在老爸身上，他溫柔地摸著你的頭…`;
             } else if (eHP <= 0) {
-                title = "🎉 你贏了！操死老爸";
-                resultText = `轟炎司徹底累趴，他喘著氣看著你，羞恥又色情地低語：<br>
-                「不孝子…老爸居然被你操到動不了…好愧疚…爸爸的後穴被兒子幹壞了…但…真的好爽…對不起…」`;
+                title = "🎉 你贏了！操壞老爸";
+                resultText = `轟炎司徹底被你操壞，喘著氣羞恥地說：<br>「燈矢…爸爸的屁股被你打得又紅又腫…真的壞掉了…」`;
             }
             
             if (title) {
@@ -469,7 +439,7 @@
             pCooldown = new Array(6).fill(0);
             eCooldown = new Array(6).fill(0);
             
-            document.getElementById('log').innerHTML = `<div style="text-align:center; padding:20px 0; opacity:0.8;">🔥 新一局開始！<br>轟燈矢 目標：操死老爸😍</div>`;
+            document.getElementById('log').innerHTML = `<div style="text-align:center; padding:20px 0; opacity:0.8;">🔥 新一局開始！<br>轟燈矢 目標：操壞老爸😍</div>`;
             document.getElementById('modal').style.display = 'none';
             updateBars();
             renderSkills();
@@ -479,7 +449,7 @@
         window.onload = () => {
             updateBars();
             renderSkills();
-            log(`<strong style="color:#ff4d4d">性愛格鬥開始！</strong><br>轟燈矢（攻） vs 轟炎司（受）<br>目標：把老爸幹壞💕<br>病嬌兒子正式開幹！`);
+            log(`<strong style="color:#ff4d4d">性愛格鬥開始！</strong><br>轟燈矢（攻） vs 轟炎司（受）<br>目標：把老爸幹壞💕`);
         };
     </script>
 </body>
