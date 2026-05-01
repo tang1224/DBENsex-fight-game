@@ -64,27 +64,15 @@
         .player-panel { border: 2px solid #ff8c00; }
         .enemy-panel { border: 2px solid #ff4d94; }
         
-        .name {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        
+        .name { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
         .bars { display: flex; flex-direction: column; gap: 10px; }
         .bar-label { font-size: 12px; display: flex; justify-content: space-between; margin-bottom: 3px; }
         .bar-outer { height: 18px; background: #16121f; border-radius: 9999px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); }
         .bar-inner { height: 100%; transition: width 0.4s ease; border-radius: 9999px; }
-        
         .stamina-bar { background: linear-gradient(90deg, #7fb8a8, #a3d9c9); }
         .pleasure-bar { background: linear-gradient(90deg, #ff4d94, #ff99cc); }
-        
-        .pleasure-bar.warning {
-            animation: pulse 800ms infinite alternate;
-        }
-        @keyframes pulse {
-            from { box-shadow: 0 0 8px #ff4d94; }
-            to { box-shadow: 0 0 20px #ff4d94; }
-        }
+        .pleasure-bar.warning { animation: pulse 800ms infinite alternate; }
+        @keyframes pulse { from { box-shadow: 0 0 8px #ff4d94; } to { box-shadow: 0 0 20px #ff4d94; } }
         
         .log-container {
             height: 260px;
@@ -178,7 +166,6 @@
         <header>🔥 性愛格鬥 🔥<br>轟燈矢（攻） vs 轟炎司（受）</header>
         
         <div class="status-container">
-            <!-- 轟燈矢（你） -->
             <div class="player-panel">
                 <div class="name">轟燈矢 🔥 👤</div>
                 <div class="bars">
@@ -192,8 +179,6 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- 轟炎司 -->
             <div class="enemy-panel">
                 <div class="name">轟炎司 💥 👔</div>
                 <div class="bars">
@@ -213,7 +198,6 @@
         <div id="skills-grid" class="skills-grid"></div>
     </div>
 
-    <!-- 結局 Modal -->
     <div id="modal" class="modal">
         <div class="modal-content">
             <h2 id="modal-title" style="margin-bottom:12px;"></h2>
@@ -230,8 +214,8 @@
     </div>
 
     <script>
-        let pHP = 100, pPleasure = 0;        // 轟燈矢（你・攻）
-        let eHP = 100, ePleasure = 0;        // 轟炎司（老爸・受）
+        let pHP = 100, pPleasure = 0;
+        let eHP = 100, ePleasure = 0;
         let round = 0;
         let gameEnded = false;
         
@@ -247,7 +231,7 @@
             {id:2, name:"打屁股狂幹", shortDesc:"消耗18體力，對方+48快感（自+15）", cost:18, oppD:48, selfD:15, hpR:0, cd:1,
              flavors:["你用力打老爸屁股留下鮮紅巴掌印，同時猛插後穴：「老爸…你的屁股好紅…」","啪啪的打屁股聲響起，老爸被打得又紅又腫，你繼續狂幹。"]},
             {id:3, name:"騎乘位爆插", shortDesc:"消耗24體力，對方+58快感", cost:24, oppD:58, selfD:18, hpR:0, cd:0,
-             flavors:["你騎在老爸身上瘋狂上下套弄，邊打他胸口邊插：「老爸…被兒子騎的感覺如何？」","你用力壓著老爸胸部猛幹。"]},
+             flavors:["你騎在老爸身上瘋狂套弄，邊打他胸部邊插：「老爸…被兒子騎的感覺如何？」","你用力壓著老爸胸部猛幹。"]},
             {id:4, name:"火焰SM", shortDesc:"消耗35體力，對方+82快感（冷卻4）", cost:35, oppD:82, selfD:25, hpR:0, cd:4,
              flavors:["你用火焰在老爸屁股和胸口畫出淫紋，一邊猛幹一邊燒：「老爸…火焰對你只是小case吧？那就好好被兒子玩…」","火焰SM讓老爸全身發燙，你笑得病嬌。"]},
             {id:5, name:"喘息恢復", shortDesc:"恢復40體力，-30快感（冷卻3）", cost:0, oppD:0, selfD:-30, hpR:40, cd:3,
@@ -257,13 +241,13 @@
         // 轟炎司（受）的技能
         const enemySkills = [
             {id:0, name:"小穴縮緊", shortDesc:"消耗12體力，對方+28快感", cost:12, oppD:28, selfD:6, hpR:0, cd:0,
-             flavors:["轟炎司羞恥地用力縮緊後穴，死死夾住你的肉棒…","老爸的後穴突然劇烈收縮，讓你爽得腰發軟。"]},
+             flavors:["轟炎司羞恥地用力縮緊後穴，死死夾住你的肉棒…","老爸的後穴突然劇烈收縮，讓你爽得腰發軟."]},
             {id:1, name:"扭腰承受", shortDesc:"消耗15體力，對方+36快感", cost:15, oppD:36, selfD:9, hpR:0, cd:0,
-             flavors:["老爸被插得忍不住扭腰，後穴不停收縮…","轟炎司咬唇，屁股無意識地往後頂。"]},
+             flavors:["老爸被插得忍不住扭腰，後穴不停收縮…","轟炎司咬唇，屁股無意識地往後頂."]},
             {id:2, name:"羞恥縮穴", shortDesc:"消耗22體力，對方+50快感（冷卻1）", cost:22, oppD:50, selfD:12, hpR:0, cd:1,
-             flavors:["老爸全身通紅，後穴劇烈痙攣收縮：「燈矢…太深了…」","被幹得小穴不停抽動，老爸的聲音都變調了。"]},
+             flavors:["老爸全身通紅，後穴劇烈痙攣收縮：「燈矢…太深了…」","被幹得小穴不停抽動，老爸的聲音都變調了."]},
             {id:3, name:"被動後入", shortDesc:"消耗26體力，對方+60快感", cost:26, oppD:60, selfD:16, hpR:0, cd:0,
-             flavors:["老爸被你從後面猛幹，只能抓著床單默默承受…","轟炎司的後穴又濕又熱，被插得不停收縮。"]},
+             flavors:["老爸被你從後面猛幹，只能抓著床單默默承受…","轟炎司的後穴又濕又熱，被插得不停收縮."]},
             {id:4, name:"極限高潮", shortDesc:"消耗40體力，對方+90快感（冷卻5）", cost:40, oppD:90, selfD:30, hpR:0, cd:5,
              flavors:["老爸徹底被你幹到極限，後穴狂縮，全身劇烈痙攣…"]},
             {id:5, name:"英雄喘息", shortDesc:"恢復42體力，-35快感（冷卻2）", cost:0, oppD:0, selfD:-35, hpR:42, cd:2,
@@ -357,21 +341,24 @@
         function checkEnd() {
             if (gameEnded) return true;
             let title = '', resultText = '';
-            
+            const pregnantChance = (ePleasure >= 92 || eHP <= 12) && Math.random() < 0.7; // 隱藏懷孕觸發條件
+
             if (pPleasure >= 100) {
-                title = "😩 你輸了…高潮了";
-                resultText = `轟炎司抱著你，低聲說：<br>「燈矢…兒子的精液回家了…爸爸好滿足…」`;
-            } else if (ePleasure >= 100) {
+                title = "😩 你輸了…";
+                resultText = `轟炎司溫柔抱著高潮的你，低聲說：<br>「燈矢…兒子的精液回家了…爸爸好滿足…」`;
+            } else if (ePleasure >= 100 || eHP <= 0) {
                 title = "🎉 你贏了！操壞老爸";
-                resultText = `轟炎司高潮了！他羞恥地發抖：<br>「不孝子…老爸被自己兒子幹到高潮…好羞恥…後穴都壞掉了…」`;
+                if (pregnantChance) {
+                    resultText = `轟炎司高潮後，摸著自己微微鼓起的小腹，羞恥又溫柔地說：<br>
+                    「燈矢…老爸好像…被你射懷孕了…肚子裡有你的孩子了…好羞恥…但好幸福…爸爸會幫你生下來…❤️」`;
+                } else {
+                    resultText = `轟炎司徹底被你操壞，羞恥地發抖：<br>「不孝子…老爸被自己兒子幹到高潮…好羞恥…後穴都壞掉了…」`;
+                }
             } else if (pHP <= 0) {
-                title = "😩 你輸了…累趴";
-                resultText = `你累癱在老爸身上，他溫柔地摸著你的頭…`;
-            } else if (eHP <= 0) {
-                title = "🎉 你贏了！操壞老爸";
-                resultText = `轟炎司徹底被你操壞，喘著氣羞恥地說：<br>「燈矢…爸爸的屁股被你打得又紅又腫…真的壞掉了…」`;
+                title = "😩 你輸了…";
+                resultText = `你累癱在老爸懷裡…`;
             }
-            
+
             if (title) {
                 gameEnded = true;
                 document.getElementById('modal-title').innerHTML = title;
