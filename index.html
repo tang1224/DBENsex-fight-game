@@ -40,19 +40,66 @@
         
         header { background: linear-gradient(90deg, #3a2e4f, #5c4866); padding: 14px; text-align: center; font-size: 22px; font-weight: 700; color: #fff; }
         
-        .status-container { display: flex; padding: 16px 20px 10px; gap: 12px; background: #221d32; }
+        .status-container {
+            display: flex;
+            padding: 16px 20px 10px;
+            gap: 12px;
+            background: #221d32;
+        }
+        
+        .player-panel, .enemy-panel {
+            flex: 1;
+            background: rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 12px;
+        }
+        
         .player-panel { border: 2px solid #ff8c00; }
         .enemy-panel { border: 2px solid #ff4d94; }
-        .name { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+        
+        .name {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
         .bars { display: flex; flex-direction: column; gap: 10px; }
-        .bar-label { font-size: 12px; display: flex; justify-content: space-between; margin-bottom: 3px; }
-        .bar-outer { height: 18px; background: #16121f; border-radius: 9999px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); }
-        .bar-inner { height: 100%; transition: width 0.4s ease; border-radius: 9999px; }
+        
+        .bar-label {
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3px;
+        }
+        
+        .bar-outer {
+            height: 18px;
+            background: #16121f;
+            border-radius: 9999px;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .bar-inner {
+            height: 100%;
+            transition: width 0.4s ease;
+            border-radius: 9999px;
+        }
+        
         .stamina-bar { background: linear-gradient(90deg, #7fb8a8, #a3d9c9); }
         .pleasure-bar { background: linear-gradient(90deg, #ff4d94, #ff99cc); }
-        .pleasure-bar.warning { animation: pulse 800ms infinite alternate; }
-        @keyframes pulse { from { box-shadow: 0 0 8px #ff4d94; } to { box-shadow: 0 0 20px #ff4d94; } }
         
+        .pleasure-bar.warning {
+            animation: pulse 800ms infinite alternate;
+        }
+        
+        @keyframes pulse {
+            from { box-shadow: 0 0 8px #ff4d94; }
+            to { box-shadow: 0 0 20px #ff4d94; }
+        }
         .log-container { height: 260px; background: #16121f; margin: 0 16px 12px; border-radius: 14px; padding: 14px; overflow-y: auto; font-size: 15px; line-height: 1.5; }
         .log-entry { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px dashed rgba(255,77,77,0.3); }
         .player-turn { color: #ff8c00; }
