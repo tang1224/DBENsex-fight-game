@@ -345,6 +345,11 @@
             const textEl = document.getElementById('pregnantText');
             textEl.innerHTML = `轟炎司高潮後摸著小腹，臉紅到耳根，聲音顫抖又色情地說：<br><br>
             「燈矢……老爸被你射得太多了……好像真的懷孕了……肚子裡有你的孩子了……好羞恥……但好幸福……❤️」`;
+            
+           // ⭐⭐ 加這段：重置選項按鈕 ⭐⭐
+
+            document.querySelectorAll('#pregnantModal button.choice-btn')
+                .forEach(btn => btn.style.display = 'inline-block');
             document.getElementById('pregnantModal').style.display = 'flex';
         }
 
