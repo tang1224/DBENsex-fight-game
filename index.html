@@ -38,32 +38,11 @@
             border: 3px solid var(--accent);
         }
         
-        header {
-            background: linear-gradient(90deg, #3a2e4f, #5c4866);
-            padding: 14px;
-            text-align: center;
-            font-size: 22px;
-            font-weight: 700;
-            color: #fff;
-        }
+        header { background: linear-gradient(90deg, #3a2e4f, #5c4866); padding: 14px; text-align: center; font-size: 22px; font-weight: 700; color: #fff; }
         
-        .status-container {
-            display: flex;
-            padding: 16px 20px 10px;
-            gap: 12px;
-            background: #221d32;
-        }
-        
-        .player-panel, .enemy-panel {
-            flex: 1;
-            background: rgba(255,255,255,0.08);
-            border-radius: 14px;
-            padding: 12px;
-        }
-        
+        .status-container { display: flex; padding: 16px 20px 10px; gap: 12px; background: #221d32; }
         .player-panel { border: 2px solid #ff8c00; }
         .enemy-panel { border: 2px solid #ff4d94; }
-        
         .name { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
         .bars { display: flex; flex-direction: column; gap: 10px; }
         .bar-label { font-size: 12px; display: flex; justify-content: space-between; margin-bottom: 3px; }
@@ -74,91 +53,23 @@
         .pleasure-bar.warning { animation: pulse 800ms infinite alternate; }
         @keyframes pulse { from { box-shadow: 0 0 8px #ff4d94; } to { box-shadow: 0 0 20px #ff4d94; } }
         
-        .log-container {
-            height: 260px;
-            background: #16121f;
-            margin: 0 16px 12px;
-            border-radius: 14px;
-            padding: 14px;
-            overflow-y: auto;
-            font-size: 15px;
-            line-height: 1.5;
-        }
-        
+        .log-container { height: 260px; background: #16121f; margin: 0 16px 12px; border-radius: 14px; padding: 14px; overflow-y: auto; font-size: 15px; line-height: 1.5; }
         .log-entry { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px dashed rgba(255,77,77,0.3); }
-        .log-entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        
         .player-turn { color: #ff8c00; }
         .enemy-turn { color: #ff4d94; }
         
-        .skills-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            padding: 16px;
-            background: #221d32;
-        }
-        
-        .skill-btn {
-            background: rgba(255,255,255,0.1);
-            border: 2px solid var(--accent);
-            border-radius: 12px;
-            padding: 12px 8px;
-            text-align: center;
-            min-height: 92px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        
+        .skills-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 16px; background: #221d32; }
+        .skill-btn { background: rgba(255,255,255,0.1); border: 2px solid var(--accent); border-radius: 12px; padding: 12px 8px; text-align: center; min-height: 92px; display: flex; flex-direction: column; justify-content: center; cursor: pointer; transition: all 0.2s; position: relative; }
         .skill-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255,77,77,0.4); }
         .skill-btn:disabled { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
+        .cooldown { position: absolute; top: 6px; right: 6px; background: #ff4d94; color: white; font-size: 10px; padding: 2px 6px; border-radius: 9999px; }
         
-        .cooldown {
-            position: absolute;
-            top: 6px; right: 6px;
-            background: #ff4d94;
-            color: white;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 9999px;
-        }
+        .modal, #pregnantModal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 9999; }
+        .modal-content { background: #2a2438; width: 92%; max-width: 420px; border-radius: 20px; padding: 28px 24px; text-align: center; border: 4px solid #ff4d4d; }
+        #pregnantModal .modal-content { background: linear-gradient(180deg, #ff99cc, #ff4d94); border: 4px solid #fff; color: #fff; box-shadow: 0 0 30px #ff69b4; }
         
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
-        
-        .modal-content {
-            background: #2a2438;
-            width: 92%;
-            max-width: 420px;
-            border-radius: 20px;
-            padding: 28px 24px;
-            text-align: center;
-            border: 4px solid #ff4d4d;
-        }
-        
-        button.restart {
-            background: linear-gradient(90deg, #ff4d94, #ff8c00);
-            color: white;
-            border: none;
-            padding: 16px;
-            font-size: 18px;
-            font-weight: 700;
-            border-radius: 9999px;
-            width: 100%;
-            margin-top: 16px;
-            cursor: pointer;
-        }
+        button.restart, button.choice-btn { background: linear-gradient(90deg, #ff4d94, #ff8c00); color: white; border: none; padding: 14px 28px; font-size: 18px; font-weight: 700; border-radius: 9999px; width: 100%; margin-top: 16px; cursor: pointer; }
+        .choice-btn { display: inline-block; width: 48%; margin: 10px 1%; }
     </style>
 </head>
 <body>
@@ -169,27 +80,15 @@
             <div class="player-panel">
                 <div class="name">轟燈矢 🔥 👤</div>
                 <div class="bars">
-                    <div class="bar-group">
-                        <div class="bar-label"><span>體力</span><span id="p-hp-text">100/100</span></div>
-                        <div class="bar-outer"><div id="p-hp-bar" class="bar-inner stamina-bar" style="width:100%"></div></div>
-                    </div>
-                    <div class="bar-group">
-                        <div class="bar-label"><span>快感</span><span id="p-pleasure-text">0/100</span></div>
-                        <div class="bar-outer"><div id="p-pleasure-bar" class="bar-inner pleasure-bar" style="width:0%"></div></div>
-                    </div>
+                    <div class="bar-group"><div class="bar-label"><span>體力</span><span id="p-hp-text">100/100</span></div><div class="bar-outer"><div id="p-hp-bar" class="bar-inner stamina-bar" style="width:100%"></div></div></div>
+                    <div class="bar-group"><div class="bar-label"><span>快感</span><span id="p-pleasure-text">0/100</span></div><div class="bar-outer"><div id="p-pleasure-bar" class="bar-inner pleasure-bar" style="width:0%"></div></div></div>
                 </div>
             </div>
             <div class="enemy-panel">
                 <div class="name">轟炎司 💥 👔</div>
                 <div class="bars">
-                    <div class="bar-group">
-                        <div class="bar-label"><span>體力</span><span id="e-hp-text">100/100</span></div>
-                        <div class="bar-outer"><div id="e-hp-bar" class="bar-inner stamina-bar" style="width:100%"></div></div>
-                    </div>
-                    <div class="bar-group">
-                        <div class="bar-label"><span>快感</span><span id="e-pleasure-text">0/100</span></div>
-                        <div class="bar-outer"><div id="e-pleasure-bar" class="bar-inner pleasure-bar" style="width:0%"></div></div>
-                    </div>
+                    <div class="bar-group"><div class="bar-label"><span>體力</span><span id="e-hp-text">100/100</span></div><div class="bar-outer"><div id="e-hp-bar" class="bar-inner stamina-bar" style="width:100%"></div></div></div>
+                    <div class="bar-group"><div class="bar-label"><span>快感</span><span id="e-pleasure-text">0/100</span></div><div class="bar-outer"><div id="e-pleasure-bar" class="bar-inner pleasure-bar" style="width:0%"></div></div></div>
                 </div>
             </div>
         </div>
@@ -198,18 +97,31 @@
         <div id="skills-grid" class="skills-grid"></div>
     </div>
 
+    <!-- 一般結束 Modal -->
     <div id="modal" class="modal">
         <div class="modal-content">
             <h2 id="modal-title" style="margin-bottom:12px;"></h2>
             <div id="modal-result" style="line-height:1.6; font-size:15.5px; margin:16px 0;"></div>
-            
             <div style="background:#16121f; padding:14px; border-radius:12px; text-align:left; font-size:14px; margin:20px 0;">
                 <div>回合數：<span id="final-rounds"></span></div>
                 <div>轟燈矢 最終：體力 <span id="final-p-hp"></span>　快感 <span id="final-p-pleasure"></span></div>
                 <div>轟炎司 最終：體力 <span id="final-e-hp"></span>　快感 <span id="final-e-pleasure"></span></div>
+                <div style="margin-top:8px; color:#ff8c00; font-weight:700;">連續勝利：<span id="final-streak">0</span>/3</div>
             </div>
-            
             <button onclick="restartGame()" class="restart">🔄 再來一局</button>
+        </div>
+    </div>
+
+    <!-- 隱藏懷孕結局 Modal -->
+    <div id="pregnantModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color:#fff; margin-bottom:16px;">❤️ 轟炎司懷孕了 ❤️</h2>
+            <div id="pregnantText" style="font-size:16px; line-height:1.7; margin:20px 0; color:#fff;"></div>
+            <div style="margin:25px 0;">
+                <button onclick="chooseBirth(true)" class="choice-btn">生下來</button>
+                <button onclick="chooseBirth(false)" class="choice-btn">墮掉</button>
+            </div>
+            <button onclick="restartGame()" class="restart" style="background:#fff; color:#ff4d94;">🔄 再來一局</button>
         </div>
     </div>
 
@@ -218,27 +130,28 @@
         let eHP = 100, ePleasure = 0;
         let round = 0;
         let gameEnded = false;
-        
+        let winStreak = 0;
+
         let pCooldown = new Array(6).fill(0);
         let eCooldown = new Array(6).fill(0);
 
-        // 轟燈矢（攻）的技能
+        const WIN_STREAK_REQUIRED = 3;   // ←←← 測試用3，正式版請改成5
+
         const playerSkills = [
             {id:0, name:"深喉老爸", shortDesc:"消耗14體力，對方+30快感", cost:14, oppD:30, selfD:8, hpR:0, cd:0,
-             flavors:["你跪在老爸面前用力深喉他的粗屌，病嬌低語：「老爸…你是我的…」","你把老爸的肉棒吞到喉嚨深處，眼睛發紅地吸吮。"]},
+             flavors:["你跪在老爸面前用力深喉他的粗屌，病嬌低語：「老爸…你是我的…」","你把老爸的肉棒吞到喉嚨深處，眼睛發紅地吸吮."]},
             {id:1, name:"手指玩前列腺", shortDesc:"消耗16體力，對方+38快感", cost:16, oppD:38, selfD:10, hpR:0, cd:0,
-             flavors:["你把手指插進老爸後穴，猛摳前列腺：「老爸…這裡是我的專屬…」","手指快速抽插，老爸的後穴不停收縮。"]},
+             flavors:["你把手指插進老爸後穴，猛摳前列腺：「老爸…這裡是我的專屬…」","手指快速抽插，老爸的後穴不停收縮."]},
             {id:2, name:"打屁股狂幹", shortDesc:"消耗18體力，對方+48快感（自+15）", cost:18, oppD:48, selfD:15, hpR:0, cd:1,
-             flavors:["你用力打老爸屁股留下鮮紅巴掌印，同時猛插後穴：「老爸…你的屁股好紅…」","啪啪的打屁股聲響起，老爸被打得又紅又腫，你繼續狂幹。"]},
+             flavors:["你用力打老爸屁股留下鮮紅巴掌印，同時猛插後穴：「老爸…你的屁股好紅…」","啪啪的打屁股聲響起，老爸被打得又紅又腫，你繼續狂幹."]},
             {id:3, name:"騎乘位爆插", shortDesc:"消耗24體力，對方+58快感", cost:24, oppD:58, selfD:18, hpR:0, cd:0,
-             flavors:["你騎在老爸身上瘋狂套弄，邊打他胸部邊插：「老爸…被兒子騎的感覺如何？」","你用力壓著老爸胸部猛幹。"]},
+             flavors:["你騎在老爸身上瘋狂套弄，邊打他胸部邊插：「老爸…被兒子騎的感覺如何？」","你用力壓著老爸胸部猛幹."]},
             {id:4, name:"火焰SM", shortDesc:"消耗35體力，對方+82快感（冷卻4）", cost:35, oppD:82, selfD:25, hpR:0, cd:4,
-             flavors:["你用火焰在老爸屁股和胸口畫出淫紋，一邊猛幹一邊燒：「老爸…火焰對你只是小case吧？那就好好被兒子玩…」","火焰SM讓老爸全身發燙，你笑得病嬌。"]},
+             flavors:["你用火焰在老爸屁股和胸口畫出淫紋，一邊猛幹一邊燒：「老爸…火焰對你只是小case吧？那就好好被兒子玩…」","火焰SM讓老爸全身發燙，你笑得病嬌."]},
             {id:5, name:"喘息恢復", shortDesc:"恢復40體力，-30快感（冷卻3）", cost:0, oppD:0, selfD:-30, hpR:40, cd:3,
              flavors:["你深呼吸壓下快感，繼續用病嬌眼神盯著老爸：「還沒玩夠…」"]}
         ];
 
-        // 轟炎司（受）的技能
         const enemySkills = [
             {id:0, name:"小穴縮緊", shortDesc:"消耗12體力，對方+28快感", cost:12, oppD:28, selfD:6, hpR:0, cd:0,
              flavors:["轟炎司羞恥地用力縮緊後穴，死死夾住你的肉棒…","老爸的後穴突然劇烈收縮，讓你爽得腰發軟."]},
@@ -340,23 +253,27 @@
 
         function checkEnd() {
             if (gameEnded) return true;
+            let isWin = (ePleasure >= 100 || eHP <= 0);
             let title = '', resultText = '';
-            const pregnantChance = (ePleasure >= 92 || eHP <= 12) && Math.random() < 0.7; // 隱藏懷孕觸發條件
 
             if (pPleasure >= 100) {
                 title = "😩 你輸了…";
-                resultText = `轟炎司溫柔抱著高潮的你，低聲說：<br>「燈矢…兒子的精液回家了…爸爸好滿足…」`;
-            } else if (ePleasure >= 100 || eHP <= 0) {
+                resultText = `轟炎司溫柔抱著你…`;
+                winStreak = 0;
+            } else if (isWin) {
+                winStreak++;
                 title = "🎉 你贏了！操壞老爸";
-                if (pregnantChance) {
-                    resultText = `轟炎司高潮後，摸著自己微微鼓起的小腹，羞恥又溫柔地說：<br>
-                    「燈矢…老爸好像…被你射懷孕了…肚子裡有你的孩子了…好羞恥…但好幸福…爸爸會幫你生下來…❤️」`;
-                } else {
-                    resultText = `轟炎司徹底被你操壞，羞恥地發抖：<br>「不孝子…老爸被自己兒子幹到高潮…好羞恥…後穴都壞掉了…」`;
+                resultText = `轟炎司徹底被你操壞…`;
+
+                if (winStreak >= WIN_STREAK_REQUIRED) {
+                    winStreak = 0; //gpt改
+                    showPregnantModal();
+                    return true;
                 }
             } else if (pHP <= 0) {
                 title = "😩 你輸了…";
                 resultText = `你累癱在老爸懷裡…`;
+                winStreak = 0;
             }
 
             if (title) {
@@ -368,14 +285,35 @@
                 document.getElementById('final-p-pleasure').textContent = Math.floor(pPleasure);
                 document.getElementById('final-e-hp').textContent = Math.floor(eHP);
                 document.getElementById('final-e-pleasure').textContent = Math.floor(ePleasure);
+                document.getElementById('final-streak').textContent = winStreak;
                 document.getElementById('modal').style.display = 'flex';
-                return true;
             }
             return false;
         }
 
+        function showPregnantModal() {
+            gameEnded = true;
+            const textEl = document.getElementById('pregnantText');
+            textEl.innerHTML = `轟炎司高潮後摸著小腹，臉紅到耳根，聲音顫抖又色情地說：<br><br>
+            「燈矢……老爸被你射得太多了……好像真的懷孕了……肚子裡有你的孩子了……好羞恥……但好幸福……❤️」`;
+            document.getElementById('pregnantModal').style.display = 'flex';
+        }
+
+        function chooseBirth(isBirth) {
+            const textEl = document.getElementById('pregnantText');
+            if (isBirth) {
+                textEl.innerHTML = `轟炎司狂喜地抱緊你，眼裡滿是愛意：<br>「真的要生下來嗎？爸爸好開心……爸爸會把你的孩子好好生下來……我們一起養他……❤️」`;
+            } else {
+                textEl.innerHTML = `轟炎司愧疚又絕望地低頭，眼淚滑落：<br>「……要墮掉嗎？爸爸居然被自己的兒子搞到懷孕……好對不起你……爸爸真的壞掉了……」`;
+            }
+            document.querySelectorAll('#pregnantModal button.choice-btn').forEach(btn => btn.style.display = 'none');
+        }
+
         function playerUseSkill(i) {
             if (gameEnded || pCooldown[i] > 0 || pHP < playerSkills[i].cost) return;
+            
+            round++; //💥gpt改
+            
             executeSkill(true, i);
             if (checkEnd()) return;
             setTimeout(aiTurn, 700);
@@ -384,12 +322,13 @@
         function aiTurn() {
             if (gameEnded) return;
             
+            round++;
+            
             let choice = 0;
             if (ePleasure >= 72) {
                 const rec = enemySkills.findIndex(s => s.hpR > 0);
                 if (rec !== -1 && eCooldown[rec] === 0) choice = rec;
-            }
-            else if (pPleasure >= 75) {
+            } else if (pPleasure >= 75) {
                 let maxDmg = -1;
                 for (let i=0; i<6; i++) {
                     if (eCooldown[i]===0 && eHP >= enemySkills[i].cost && enemySkills[i].oppD > maxDmg) {
@@ -397,8 +336,7 @@
                         choice = i;
                     }
                 }
-            }
-            else {
+            } else {
                 const valid = [];
                 for (let i=0; i<6; i++) {
                     if (eCooldown[i]===0 && eHP >= enemySkills[i].cost) valid.push(i);
@@ -407,7 +345,7 @@
             }
             
             executeSkill(false, choice);
-            round++;
+            //round++;gpt移上去
             
             for (let i=0; i<6; i++) {
                 if (pCooldown[i]>0) pCooldown[i]--;
@@ -422,21 +360,22 @@
             pHP = 100; pPleasure = 0;
             eHP = 100; ePleasure = 0;
             round = 0;
+           // winStreak = 0;
             gameEnded = false;
             pCooldown = new Array(6).fill(0);
             eCooldown = new Array(6).fill(0);
             
-            document.getElementById('log').innerHTML = `<div style="text-align:center; padding:20px 0; opacity:0.8;">🔥 新一局開始！<br>轟燈矢 目標：操壞老爸😍</div>`;
             document.getElementById('modal').style.display = 'none';
+            document.getElementById('pregnantModal').style.display = 'none';
             updateBars();
             renderSkills();
-            log(`<strong style="color:#ff8c00">第1回合開始！兒子先攻！</strong>`);
+            log(`<strong style="color:#ff8c00">第1回合開始！連續勝利 ${winStreak}/${WIN_STREAK_REQUIRED}</strong>`);
         }
 
         window.onload = () => {
             updateBars();
             renderSkills();
-            log(`<strong style="color:#ff4d4d">性愛格鬥開始！</strong><br>轟燈矢（攻） vs 轟炎司（受）<br>目標：把老爸幹壞💕`);
+            log(`<strong style="color:#ff4d4d">性愛格鬥開始！</strong><br>連續贏 ${WIN_STREAK_REQUIRED} 次可觸發隱藏懷孕結局`);
         };
     </script>
 </body>
