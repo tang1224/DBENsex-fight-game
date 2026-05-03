@@ -1,3 +1,5 @@
+可以點圖放大
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -19,6 +21,9 @@
         }
         
         * { margin:0; padding:0; box-sizing:border-box; }
+        
+
+        
         body {
             font-family: 'Noto Sans TC', system-ui, sans-serif;
             background: linear-gradient(180deg, #1f1b2e 0%, #16121f 100%);
@@ -29,7 +34,22 @@
             flex-direction: column;
             align-items: center;
         }
-        
+        <div id="cgZoom" onclick="closeCGZoom()" style="
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,0.9);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            z-index:99999;
+        ">
+            <img id="cgZoomImg" style="
+                max-width:90%;
+                max-height:90%;
+                border-radius:12px;
+                box-shadow:0 0 30px rgba(255,77,153,0.6);
+            ">
+        </div>        
         #app {
             width: 100%;
             max-width: 480px;
@@ -142,6 +162,8 @@
             </div>
         </div>
         
+        <div style="text-align:right; padding:0 16px;">
+          <button onclick="openGallery()">📖 CG圖鑑</button></div>
         <div id="log" class="log-container"></div>
         <div id="skills-grid" class="skills-grid"></div>
     </div>
@@ -165,6 +187,7 @@
     <div id="pregnantModal" class="modal">
         <div class="modal-content">
             <h2 style="color:#fff; margin-bottom:16px;">❤️ 轟炎司懷孕了 ❤️</h2>
+            <img id="cgImage" style="width:100%; border-radius:12px; margin-bottom:12px; display:none;">
             <div id="pregnantText" style="font-size:16px; line-height:1.7; margin:20px 0; color:#fff;"></div>
             <div style="margin:25px 0;">
                 <button onclick="chooseBirth(true)" class="choice-btn">生下來</button>
@@ -183,6 +206,11 @@
 
         let pCooldown = new Array(6).fill(0);
         let eCooldown = new Array(6).fill(0);
+        let cgUnlocked = {
+            pregnant: false,
+            birth: false,
+            abort: false
+        };//解鎖狀態
 
         const WIN_STREAK_REQUIRED = 3;   // ←←← 測試用3，正式版請改成5
 
@@ -215,6 +243,21 @@
             {id:5, name:"英雄喘息", shortDesc:"恢復42體力，-35快感（冷卻2）", cost:0, oppD:0, selfD:-35, hpR:42, cd:2,
              flavors:["轟炎司努力壓下快感，後穴依然微微抽動…"]}
         ];
+        //統一CG資料
+        const CG_LIST = {
+            pregnant: {
+               name: "禁忌之愛悄然結果",
+               img: "cg_pregnant.png"
+            },
+            birth: {
+               name: "扭曲愛戀的血脈延續",
+               img: "cg_birth.png"
+            },
+            abort: {
+               name: "被深愛者親手摧毀",
+               img: "cg_abort.png"
+            }
+        };
 
         function log(html) {
             const logEl = document.getElementById('log');
@@ -342,12 +385,20 @@
 
         function showPregnantModal() {
             gameEnded = true;
+            
+            // ⭐ 解鎖「懷孕CG」
+            unlockCG('pregnant');
+            
+            // ⭐ 設定CG圖片
+            const img = document.getElementById('cgImage');
+            img.src = "cg_pregnant.png";  // 換成你的圖
+            img.style.display = 'block';
+            
             const textEl = document.getElementById('pregnantText');
             textEl.innerHTML = `轟炎司高潮後摸著小腹，臉紅到耳根，聲音顫抖又色情地說：<br><br>
             「燈矢……老爸被你射得太多了……好像真的懷孕了……肚子裡有你的孩子了……好羞恥……但好幸福……❤️」`;
             
-           // ⭐⭐ 加這段：重置選項按鈕 ⭐⭐
-
+            // ⭐⭐ 加這段：重置選項按鈕 ⭐⭐
             document.querySelectorAll('#pregnantModal button.choice-btn')
                 .forEach(btn => btn.style.display = 'inline-block');
             document.getElementById('pregnantModal').style.display = 'flex';
@@ -356,8 +407,14 @@
         function chooseBirth(isBirth) {
             const textEl = document.getElementById('pregnantText');
             if (isBirth) {
+                      // ⭐ 解鎖「生下來」
+                unlockCG('birth');
+                
                 textEl.innerHTML = `轟炎司狂喜地抱緊你，眼裡滿是愛意：<br>「真的要生下來嗎？爸爸好開心……爸爸會把你的孩子好好生下來……我們一起養他……❤️」`;
             } else {
+                      // ⭐ 解鎖「墮掉」
+                unlockCG('abort');
+        
                 textEl.innerHTML = `轟炎司愧疚又絕望地低頭，眼淚滑落：<br>「……要墮掉嗎？爸爸居然被自己的兒子搞到懷孕……好對不起你……爸爸真的壞掉了……」`;
             }
             document.querySelectorAll('#pregnantModal button.choice-btn').forEach(btn => btn.style.display = 'none');
@@ -425,6 +482,72 @@
             renderSkills();
             log(`<strong style="color:#ff8c00">第1回合開始！連續勝利 ${winStreak}/${WIN_STREAK_REQUIRED}</strong>`);
         }
+        
+        function unlockCG(name) {
+            if (!cgUnlocked[name]) {
+              cgUnlocked[name] = true;
+              log(`🔔 解鎖CG：「禁忌的結果」`);
+            }
+        }
+        
+        
+        function openGallery() {
+            let html = `<h3 style="margin-bottom:12px;">📖 CG圖鑑</h3>`;
+            html += `<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">`;
+
+            for (let key in CG_LIST) {
+                const cg = CG_LIST[key];
+                const unlocked = cgUnlocked[key];
+
+            html += `
+            <div style="text-align:center;">
+                <div style="
+                    border-radius:12px;
+                    overflow:hidden;
+                    background:#000;
+                ">
+                    <img src="${cg.img}" onclick="openCGZoom('${cg.img}')" style="
+                        width:100%;
+                        display:block;
+                        filter:${unlocked ? 'none' : 'blur(12px)'};
+                        opacity:${unlocked ? '1' : '0.4'};
+                    ">
+                </div>
+                <div style="font-size:13px; margin-top:4px;">
+                    ${unlocked ? cg.name : '？？？'}
+                </div>
+            </div>
+            `;
+        }
+
+    html += `</div>`;
+
+    document.getElementById('modal-title').innerHTML = "CG圖鑑";
+    document.getElementById('modal-result').innerHTML = html;
+    document.getElementById('modal').style.display = 'flex';
+}
+        
+        
+        function unlockCG(key) {
+            if (!cgUnlocked[key]) {
+                cgUnlocked[key] = true;
+                log(`🔔 解鎖CG：「${CG_LIST[key].name}」`);
+            }
+        }//解鎖函式（共用的
+        
+        function openCGZoom(src) {
+            const zoom = document.getElementById('cgZoom');
+            const img = document.getElementById('cgZoomImg');
+
+            img.src = src;
+            zoom.style.display = 'flex';
+        }
+
+        function closeCGZoom() {
+            document.getElementById('cgZoom').style.display = 'none';
+        }
+        
+        
 
         window.onload = () => {
             updateBars();
