@@ -188,12 +188,14 @@
     <!-- 隱藏懷孕結局 Modal -->
     <div id="pregnantModal" class="modal">
         <div class="modal-content">
-            <h2 style="color:#fff; margin-bottom:16px;">❤️ 轟炎司懷孕了 ❤️</h2>
+            <h2 style="color:#fff; margin-bottom:16px;">❤️特殊結局❤️</h2>
             <img id="cgImage" style="width:100%; border-radius:12px; margin-bottom:12px; display:none;">
             <div id="pregnantText" style="font-size:16px; line-height:1.7; margin:20px 0; color:#fff;"></div>
             <div style="margin:25px 0;">
+              <div id="choiceArea" style="margin:25px 0;">
                 <button onclick="chooseBirth(true)" class="choice-btn">生下來</button>
                 <button onclick="chooseBirth(false)" class="choice-btn">墮掉</button>
+              </div>  
             </div>
             <button onclick="restartGame()" class="restart" style="background:#fff; color:#ff4d94;">🔄 再來一局</button>
         </div>
@@ -275,6 +277,14 @@
             abort: {
                name: "被深愛者親手摧毀",
                img: "cg_abort.PNG"
+            },
+            cancer: {
+               name: "錯誤的兩條線",
+               img: "cg_cancer.PNG"
+            },
+            intrude: {
+               name: "失💓禁💓高💓潮💓",
+               img: "cg_intrude.PNG"
             }
         };
 
@@ -361,8 +371,20 @@
             log(html);
             updateBars();
         }
+        
+        function checkSpecialEvents() {
+            if (gameEnded) return true;
 
-        function checkEnd() {
+            // 😱 闖入事件（戰鬥中）
+            if (Math.random() < 0.08) {
+                showIntrudeEnding();
+                return true;
+             }
+
+            return false;
+        }
+
+         function checkEnd() {
             if (gameEnded) return true;
             let isWin = (ePleasure >= 100 || eHP <= 0);
             let title = '', resultText = '';
@@ -376,11 +398,16 @@
                 title = "🎉 你贏了！操壞老爸";
                 resultText = `轟炎司徹底被你操壞…`;
 
-                if (winStreak >= WIN_STREAK_REQUIRED) {
-                    winStreak = 0; //gpt改
-                    showPregnantModal();
+                 if (winStreak >= WIN_STREAK_REQUIRED) {
+                    const roll = Math.random();
+                    if (roll < 0.8) {
+                     showPregnantModal(); // 80%
+                    } else {
+                     showCancerEnding(); // 20%（自動吃剩下的）
+                    }
+                    winStreak = 0;
                     return true;
-                }
+                 }
             } else if (pHP <= 0) {
                 title = "😩 你輸了…";
                 resultText = `你累癱在老爸懷裡…`;
@@ -410,7 +437,7 @@
             
             // ⭐ 設定CG圖片
             const img = document.getElementById('cgImage');
-            img.src = "cg_pregnant.PNG";  // 換成你的圖
+            img.src = CG_LIST.pregnant.img; // 換成你的圖
             img.style.display = 'block';
             
             const textEl = document.getElementById('pregnantText');
@@ -445,6 +472,49 @@
             }
             document.querySelectorAll('#pregnantModal button.choice-btn').forEach(btn => btn.style.display = 'none');
         }
+        
+        function showCancerEnding() {
+            gameEnded = true;
+
+            unlockCG('cancer');
+
+            const img = document.getElementById('cgImage');
+            img.src = CG_LIST.cancer.img;
+            img.style.display = 'block';
+
+            const textEl = document.getElementById('pregnantText');
+            textEl.innerHTML = `轟炎司顫抖地看著驗孕棒的兩條線...<br><br>
+            「不可能……我怎麼會……」<br><br>
+             醫院檢查結果顯示——那不是懷孕，而是...睪丸癌。`;
+                 // ❌ 把選項隱藏
+
+            document.querySelectorAll('#pregnantModal button.choice-btn')
+                   .forEach(btn => btn.style.display = 'none');
+
+            document.getElementById('pregnantModal').style.display = 'flex';
+        }
+        
+        
+        function showIntrudeEnding() {
+            gameEnded = true;
+
+            unlockCG('intrude');
+
+            const img = document.getElementById('cgImage');
+            img.src = CG_LIST.intrude.img;
+            img.style.display = 'block';
+
+            const textEl = document.getElementById('pregnantText');
+            textEl.innerHTML = `……但在最後一刻，房門被突然推開。<br><br>
+焦凍看見了父親被自己哥哥幹到失禁的淫亂模樣。<br><br>
+轟炎司在極度的羞恥中徹底崩壞，當著小兒子的面噴出尿液，哭得像個壞掉的玩具。<br><br>`;
+
+            document.querySelectorAll('#pregnantModal button.choice-btn')
+                   .forEach(btn => btn.style.display = 'none');
+
+            document.getElementById('pregnantModal').style.display = 'flex';
+        }
+
 
         function playerUseSkill(i) {
             if (gameEnded || pCooldown[i] > 0 || pHP < playerSkills[i].cost) return;
@@ -457,6 +527,9 @@
 
         function aiTurn() {
             if (gameEnded) return;
+            
+                // ⭐ 插在這裡
+            if (checkSpecialEvents()) return;
             
             round++;
             
