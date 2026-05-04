@@ -407,14 +407,21 @@
 
         function chooseBirth(isBirth) {
             const textEl = document.getElementById('pregnantText');
+            const img = document.getElementById('cgImage'); // ⭐ 抓圖片
             if (isBirth) {
                       // ⭐ 解鎖「生下來」
                 unlockCG('birth');
+                      // ⭐ 換圖
+
+                img.src = CG_LIST.birth.img;
                 
                 textEl.innerHTML = `轟炎司狂喜地抱緊你，眼裡滿是愛意：<br>「真的要生下來嗎？爸爸好開心……爸爸會把你的孩子好好生下來……我們一起養他……❤️」`;
             } else {
                       // ⭐ 解鎖「墮掉」
                 unlockCG('abort');
+                      // ⭐ 換圖
+
+                img.src = CG_LIST.abort.img;
         
                 textEl.innerHTML = `轟炎司愧疚又絕望地低頭，眼淚滑落：<br>「……要墮掉嗎？爸爸居然被自己的兒子搞到懷孕……好對不起你……爸爸真的壞掉了……」`;
             }
