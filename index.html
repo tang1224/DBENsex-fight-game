@@ -147,7 +147,7 @@
         </div>
         
         <div style="text-align:right; padding:0 16px;">
-          <button onclick="openGallery()">📖 CG圖鑑</button></div>
+          <button onclick="openGallery()"> 💞燈矢和爸爸的回憶💞 </button></div>
         <div id="log" class="log-container"></div>
         <div id="skills-grid" class="skills-grid"></div>
     </div>
@@ -247,11 +247,11 @@
         //統一CG資料
         const CG_LIST = {
             pregnant: {
-               name: "禁忌之愛悄然結果",
+               name: "悄然結果",
                img: "cg_pregnant.PNG"
             },
             birth: {
-               name: "扭曲愛戀的血脈延續",
+               name: "血脈延續",
                img: "cg_birth.PNG"
             },
             abort: {
@@ -492,7 +492,7 @@
         
         
         function openGallery() {
-            let html = `<h3 style="margin-bottom:12px;">📖 CG圖鑑</h3>`;
+            let html = `<h3 style="margin-bottom:12px;">💞燈矢和爸爸的回憶💞</h3>`;
             html += `<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">`;
 
             for (let key in CG_LIST) {
@@ -524,7 +524,7 @@
 
     html += `</div>`;
 
-    document.getElementById('modal-title').innerHTML = "CG圖鑑";
+    document.getElementById('modal-title').innerHTML = "燈矢和爸爸的回憶";
     document.getElementById('modal-result').innerHTML = html;
     document.getElementById('modal').style.display = 'flex';
 }
