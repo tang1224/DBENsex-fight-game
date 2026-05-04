@@ -1,4 +1,3 @@
-可以點圖放大
 
 <!DOCTYPE html>
 <html lang="zh-TW">
@@ -34,22 +33,7 @@
             flex-direction: column;
             align-items: center;
         }
-        <div id="cgZoom" onclick="closeCGZoom()" style="
-            position:fixed;
-            inset:0;
-            background:rgba(0,0,0,0.9);
-            display:none;
-            align-items:center;
-            justify-content:center;
-            z-index:99999;
-        ">
-            <img id="cgZoomImg" style="
-                max-width:90%;
-                max-height:90%;
-                border-radius:12px;
-                box-shadow:0 0 30px rgba(255,77,153,0.6);
-            ">
-        </div>        
+            
         #app {
             width: 100%;
             max-width: 480px;
@@ -196,6 +180,22 @@
             <button onclick="restartGame()" class="restart" style="background:#fff; color:#ff4d94;">🔄 再來一局</button>
         </div>
     </div>
+    <div id="cgZoom" onclick="closeCGZoom()" style="
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,0.9);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            z-index:99999;
+        ">
+            <img id="cgZoomImg" style="
+                max-width:90%;
+                max-height:90%;
+                border-radius:12px;
+                box-shadow:0 0 30px rgba(255,77,153,0.6);
+            ">
+        </div>    
 
     <script>
         let pHP = 100, pPleasure = 0;
@@ -211,6 +211,7 @@
             birth: false,
             abort: false
         };//解鎖狀態
+        
 
         const WIN_STREAK_REQUIRED = 3;   // ←←← 測試用3，正式版請改成5
 
@@ -391,7 +392,7 @@
             
             // ⭐ 設定CG圖片
             const img = document.getElementById('cgImage');
-            img.src = "cg_pregnant.png";  // 換成你的圖
+            img.src = "cg_pregnant.PNG";  // 換成你的圖
             img.style.display = 'block';
             
             const textEl = document.getElementById('pregnantText');
@@ -422,8 +423,7 @@
 
         function playerUseSkill(i) {
             if (gameEnded || pCooldown[i] > 0 || pHP < playerSkills[i].cost) return;
-            
-            round++; //💥gpt改
+           
             
             executeSkill(true, i);
             if (checkEnd()) return;
@@ -483,13 +483,6 @@
             log(`<strong style="color:#ff8c00">第1回合開始！連續勝利 ${winStreak}/${WIN_STREAK_REQUIRED}</strong>`);
         }
         
-        function unlockCG(name) {
-            if (!cgUnlocked[name]) {
-              cgUnlocked[name] = true;
-              log(`🔔 解鎖CG：「禁忌的結果」`);
-            }
-        }
-        
         
         function openGallery() {
             let html = `<h3 style="margin-bottom:12px;">📖 CG圖鑑</h3>`;
@@ -506,11 +499,13 @@
                     overflow:hidden;
                     background:#000;
                 ">
-                    <img src="${cg.img}" onclick="openCGZoom('${cg.img}')" style="
-                        width:100%;
-                        display:block;
-                        filter:${unlocked ? 'none' : 'blur(12px)'};
-                        opacity:${unlocked ? '1' : '0.4'};
+                    <img src="${cg.img}"
+                         onclick="${unlocked ? `openCGZoom('${cg.img}')` : ''}"
+                         style="
+                            width:100%;
+                            display:block;
+                            filter:${unlocked ? 'none' : 'blur(12px)'};
+                            opacity:${unlocked ? '1' : '0.4'};
                     ">
                 </div>
                 <div style="font-size:13px; margin-top:4px;">
