@@ -123,6 +123,23 @@
         
         button.restart, button.choice-btn { background: linear-gradient(90deg, #ff4d94, #ff8c00); color: white; border: none; padding: 14px 28px; font-size: 18px; font-weight: 700; border-radius: 9999px; width: 100%; margin-top: 16px; cursor: pointer; }
         .choice-btn { display: inline-block; width: 48%; margin: 10px 1%; }
+        .gallery-btn {
+           background: rgba(255,255,255,0.08);
+           border: 2px solid #ff4d94;
+           color: #ff99cc;
+           padding: 6px 12px;
+           font-size: 13px;
+           border-radius: 10px;
+         }
+
+        .gallery-btn:hover {
+           transform: translateY(-1px);
+           box-shadow: 0 6px 14px rgba(255,77,148,0.6);
+         }
+
+        .gallery-btn:active {
+          transform: scale(0.96);
+         }
     </style>
 </head>
 <body>
@@ -131,14 +148,14 @@
         
         <div class="status-container">
             <div class="player-panel">
-                <div class="name">轟燈矢 🔥 👤</div>
+                <div class="name">轟燈矢 🏹 🐍</div>
                 <div class="bars">
                     <div class="bar-group"><div class="bar-label"><span>體力</span><span id="p-hp-text">100/100</span></div><div class="bar-outer"><div id="p-hp-bar" class="bar-inner stamina-bar" style="width:100%"></div></div></div>
                     <div class="bar-group"><div class="bar-label"><span>快感</span><span id="p-pleasure-text">0/100</span></div><div class="bar-outer"><div id="p-pleasure-bar" class="bar-inner pleasure-bar" style="width:0%"></div></div></div>
                 </div>
             </div>
             <div class="enemy-panel">
-                <div class="name">轟炎司 💥 👔</div>
+                <div class="name">轟炎司 🔥 🦧</div>
                 <div class="bars">
                     <div class="bar-group"><div class="bar-label"><span>體力</span><span id="e-hp-text">100/100</span></div><div class="bar-outer"><div id="e-hp-bar" class="bar-inner stamina-bar" style="width:100%"></div></div></div>
                     <div class="bar-group"><div class="bar-label"><span>快感</span><span id="e-pleasure-text">0/100</span></div><div class="bar-outer"><div id="e-pleasure-bar" class="bar-inner pleasure-bar" style="width:0%"></div></div></div>
@@ -147,7 +164,8 @@
         </div>
         
         <div style="text-align:right; padding:0 16px;">
-          <button onclick="openGallery()"> 💞燈矢和爸爸的回憶💞 </button></div>
+        <button class="gallery-btn" onclick="openGallery()">💞燈矢與爸爸的回憶</button>
+        </div>
         <div id="log" class="log-container"></div>
         <div id="skills-grid" class="skills-grid"></div>
     </div>
@@ -492,7 +510,7 @@
         
         
         function openGallery() {
-            let html = `<h3 style="margin-bottom:12px;">💞燈矢和爸爸的回憶💞</h3>`;
+            let html = `<h3 style="margin-bottom:12px;">💞燈矢和爸爸的回憶</h3>`;
             html += `<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">`;
 
             for (let key in CG_LIST) {
@@ -524,7 +542,7 @@
 
     html += `</div>`;
 
-    document.getElementById('modal-title').innerHTML = "燈矢和爸爸的回憶";
+    document.getElementById('modal-title').innerHTML = "Gallery";
     document.getElementById('modal-result').innerHTML = html;
     document.getElementById('modal').style.display = 'flex';
 }
