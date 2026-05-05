@@ -284,7 +284,7 @@
                img: "cg_cancer.PNG"
             },
             intrude: {
-               name: "失💓禁💓高💓潮💓",
+               name: "失💓禁💓高💓潮",
                img: "cg_intrude.PNG"
             }
         };
@@ -377,7 +377,7 @@
             if (gameEnded) return true;
 
             // 😱 闖入事件（戰鬥中）
-            if (Math.random() < 0.08) {
+            if (Math.random() < 0.1) {
                 showIntrudeEnding();
                 return true;
              }
@@ -484,9 +484,26 @@
             img.style.display = 'block';
 
             const textEl = document.getElementById('pregnantText');
-            textEl.innerHTML = `轟炎司顫抖地看著驗孕棒的兩條線...<br><br>
-            「不可能……我怎麼會……」<br><br>
-             醫院檢查結果顯示——那不是懷孕，而是...睪丸癌。`;
+            textEl.innerHTML =  `
+        驗孕棒上清晰地出現了兩條紅線。<br><br>
+        
+        轟炎司愣在床上，手指微微發抖。<br>
+        燈矢從後面抱住他，下巴抵在他肩上，低聲笑著問：<br><br>
+        
+        「老爸……你真的被我搞大了嗎？」<br><br>
+        
+        幾天後的醫院檢查結果出來了。<br>
+        醫生面色凝重地告訴他們：<br><br>
+        
+        「不是懷孕……是睪丸癌，而且已經擴散。」<br><br>
+        
+        炎司呆坐在診療室，臉色蒼白。<br>
+        燈矢卻緊緊握著他的手，病嬌地在他耳邊輕聲說：<br><br>
+        
+        「沒關係……不管是孩子還是癌症……<br>
+        只要是老爸身體裡的東西……<br>
+        都是我一個人的。<br>
+        我會陪你到最後的……❤️」`;
                  // ❌ 把選項隱藏
 
             document.querySelectorAll('#pregnantModal button.choice-btn')
@@ -583,21 +600,21 @@
         }
         
         
-function openGallery() {
-    let html = `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-            <h3 style="margin:0; color:#ff99cc;">💞 轟家相簿</h3>
-            <button onclick="closeModal()" style="background:none; border:none; color:#ff99cc; font-size:20px; cursor:pointer;">✕</button>
-        </div>
+        function openGallery() {
+        let html = `
+               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <h3 style="margin:0; color:#ff99cc;">💞 轟家相簿</h3>
+              <button onclick="closeModal()" style="background:none; border:none; color:#ff99cc; font-size:20px; cursor:pointer;">✕</button>
+               </div>
         
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-height:380px; overflow-y:auto; padding-right:8px;">
-    `;
+               <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-height:380px; overflow-y:auto; padding-right:8px;">
+            `;
 
-    for (let key in CG_LIST) {
-        const cg = CG_LIST[key];
-        const isUnlocked = cgUnlocked[key];
+        for (let key in CG_LIST) {
+          const cg = CG_LIST[key];
+          const isUnlocked = cgUnlocked[key];
 
-        html += `
+          html += `
             <div onclick="${isUnlocked ? `openCGZoom('${cg.img}')` : ''}" 
                  style="cursor: ${isUnlocked ? 'pointer' : 'default'}; border-radius:12px; overflow:hidden; background:#111; position:relative;">
                 
@@ -611,20 +628,20 @@ function openGallery() {
                     ${isUnlocked ? cg.name : '？？？'}
                 </div>
             </div>
-        `;
-    }
+          `;
+         }
 
-    html += `</div>`;
+          html += `</div>`;
 
-    document.getElementById('modal-title').innerHTML = "";
-    document.getElementById('modal-result').innerHTML = html;
-    document.getElementById('modal').style.display = 'flex';
-}
+            document.getElementById('modal-title').innerHTML = "";
+            document.getElementById('modal-result').innerHTML = html;
+            document.getElementById('modal').style.display = 'flex';
+        }
 
-// 新增關閉 modal 的函式
-function closeModal() {
-    document.getElementById('modal').style.display = 'none';
-}
+        // 新增關閉 modal 的函式
+        function closeModal() {
+           document.getElementById('modal').style.display = 'none';
+        }
         
         
         function unlockCG(key) {
