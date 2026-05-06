@@ -470,6 +470,9 @@
                 img.src = CG_LIST.abort.img;
         
                 textEl.innerHTML = `轟炎司愧疚又絕望地低頭，眼淚滑落：<br>「……要墮掉嗎？爸爸居然被自己的兒子搞到懷孕……好對不起你……爸爸真的壞掉了……」`;
+                
+                document.getElementById('pregnantModal').querySelector('h2').innerHTML = 
+                  ' 累贅 ';   
             }
             document.querySelectorAll('#pregnantModal button.choice-btn').forEach(btn => btn.style.display = 'none');
         }
