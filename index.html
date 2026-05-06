@@ -436,6 +436,11 @@
             // ⭐ 解鎖「懷孕CG」
             unlockCG('pregnant');
             
+            //標題
+            document.getElementById('pregnantModal').querySelector('h2').innerHTML = 
+             '💓轟炎司懷孕了💓️';   
+
+            
             // ⭐ 設定CG圖片
             const img = document.getElementById('cgImage');
             img.src = CG_LIST.pregnant.img; // 換成你的圖
@@ -468,9 +473,13 @@
                       // ⭐ 換圖
 
                 img.src = CG_LIST.abort.img;
+
+                document.getElementById('pregnantModal').querySelector('h2').innerHTML = 
+                 '爸爸只能看著我一個👁️';   
+
         
                 textEl.innerHTML = `轟炎司愧疚又絕望地低頭，眼淚滑落：<br>「……要墮掉嗎？爸爸居然被自己的兒子搞到懷孕……好對不起你……爸爸真的壞掉了……」`;
-              
+
             }
             document.querySelectorAll('#pregnantModal button.choice-btn').forEach(btn => btn.style.display = 'none');
         }
@@ -545,13 +554,12 @@
         而父親的雙腿發軟，前端正不受控制地噴出黃色的尿液，
         一道又一道羞恥的熱流沿著大腿根部往下淌，滴落在床單上……<br><br>
         
-        轟炎司瞬間全身僵硬，瞳孔劇烈收縮。<br>
-        極度的驚恐與羞恥讓他徹底崩壞，失禁的尿液噴得更兇，
-        整個人像壞掉的玩具一樣在燈矢懷裡不停顫抖、哭喊：<br><br>
+        轟炎司瞬間全身僵硬，瞳孔劇烈收縮，失禁的尿液噴得更兇，
+        整個人像壞掉的玩具不停顫抖、哭喊：<br><br>
         
         「……不……不要看……！！焦凍……別看爸爸……啊啊啊……！！」<br><br>
         
-        燈矢卻低笑著更用力地抱緊他，在他耳邊低語：<br>
+        燈矢卻更用力地抱緊他，在他耳邊低語：<br>
         「老爸……被弟弟看到你尿失禁的樣子了……
         真淫亂啊……」`;
         
