@@ -224,6 +224,7 @@
         let round = 0;
         let gameEnded = false;
         let winStreak = 0;
+        let birthCount = 0;        // ← 新增：生胎計數器
 
         let pCooldown = new Array(6).fill(0);
         let eCooldown = new Array(6).fill(0);
@@ -460,6 +461,9 @@
             const textEl = document.getElementById('pregnantText');
             const img = document.getElementById('cgImage'); // ⭐ 抓圖片
             if (isBirth) {
+              
+                birthCount++; // 每次生下來就 +1
+                      
                       // ⭐ 解鎖「生下來」
                 unlockCG('birth');
                       // ⭐ 換圖
@@ -467,6 +471,10 @@
                 img.src = CG_LIST.birth.img;
                 
                 textEl.innerHTML = `轟炎司狂喜地抱緊你，眼裡滿是愛意：<br>「真的要生下來嗎？爸爸好開心……爸爸會把你的孩子好好生下來……我們一起養他……❤️」`;
+                
+                        // 更新生胎記錄
+                updateBirthRecord();
+                
             } else {
                       // ⭐ 解鎖「墮掉」
                 unlockCG('abort');
@@ -483,6 +491,32 @@
             }
             document.querySelectorAll('#pregnantModal button.choice-btn').forEach(btn => btn.style.display = 'none');
         }
+        
+        
+          // 更新生胎記錄顯示
+        function updateBirthRecord() {
+             let recordEl = document.getElementById('birthRecord');
+             if (!recordEl) {
+              // 第一次建立
+                 recordEl = document.createElement('div');
+                 recordEl.id = 'birthRecord';
+                 recordEl.style.cssText = `
+                  text-align: center;
+                  margin: 12px 16px 8px;
+                  font-size: 18px;
+                  font-weight: 700;
+                  color: #fff;
+                  text-shadow: 
+                     0 0 10px #ff4dff,
+                     0 0 20px #ff4dff,
+                     0 0 30px #ff69b4;
+                  letter-spacing: 1px;
+                 `;
+                document.getElementById('skills-grid').parentNode.insertBefore(recordEl, document.getElementById('skills-grid').nextSibling);
+              }   
+              recordEl.innerHTML = `轟炎司已經生了 <span style="color:#ff4dff; font-size:22px;">${birthCount}</span> 胎`;
+        }
+        
         
         function showCancerEnding() {
             gameEnded = true;
