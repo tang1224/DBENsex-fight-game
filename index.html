@@ -225,6 +225,7 @@
         let gameEnded = false;
         let winStreak = 0;
         let birthCount = 0;        // ← 新增：生胎計數器
+        let hasCancer = false;   // ← 新增：是否罹患睪丸癌
 
         let pCooldown = new Array(6).fill(0);
         let eCooldown = new Array(6).fill(0);
@@ -249,7 +250,13 @@
             {id:4, name:"火焰SM", shortDesc:"消耗35體力，對方+82快感（冷卻4）", cost:35, oppD:82, selfD:25, hpR:0, cd:4,
              flavors:["你用火焰在老爸屁股和胸口畫出淫紋，一邊猛幹一邊燒：「老爸…火焰對你只是小case吧？那就好好被兒子玩…」","火焰SM讓老爸全身發燙，你笑得病嬌."]},
             {id:5, name:"喘息恢復", shortDesc:"恢復40體力，-30快感（冷卻3）", cost:0, oppD:0, selfD:-30, hpR:40, cd:3,
-             flavors:["你深呼吸壓下快感，繼續用病嬌眼神盯著老爸：「還沒玩夠…」"]}
+             flavors:["你深呼吸壓下快感，繼續用病嬌眼神盯著老爸：「還沒玩夠…」"]},
+            // 新增技能（預設先隱藏）
+            {id:6, name:"孕肚玩弄", shortDesc:"消耗28體力，對方+65快感（需3胎）", cost:28, oppD:65, selfD:12, hpR:0, cd:2,
+             flavors:["你輕柔又病態地揉捏老爸圓潤的孕肚，在他耳邊低語：「這裡面……有我的孩子……」","你一邊抽插一邊按壓孕肚，感受裡面的胎動。"]},
+            {id:7, name:"乳汁榨取", shortDesc:"消耗32體力，對方+78快感（需5胎）", cost:32, oppD:78, selfD:18, hpR:0, cd:3,
+             flavors:["你低頭含住老爸腫脹的乳頭，用力吸吮噴出的乳汁：「老爸的奶……好甜……」","你一邊猛幹一邊大力擠奶，乳汁噴得兩人滿身都是。"]}
+
         ];
 
         const enemySkills = [
@@ -319,6 +326,10 @@
             const grid = document.getElementById('skills-grid');
             grid.innerHTML = '';
             playerSkills.forEach((sk, i) => {
+                      // 條件判斷
+                   if (sk.id === 6 && birthCount < 3) return;   // 孕肚玩弄需3胎
+                   if (sk.id === 7 && birthCount < 5) return;   // 乳汁榨取需5胎
+        
                 const disabled = pCooldown[i] > 0 || pHP < sk.cost;
                 const btn = document.createElement('div');
                 btn.className = `skill-btn ${disabled ? 'disabled' : ''}`;
@@ -339,19 +350,26 @@
             
             if (isPlayer) pHP -= skill.cost;
             else eHP -= skill.cost;
-            
-            if (skill.hpR) {
-                if (isPlayer) pHP += skill.hpR;
-                else eHP += skill.hpR;
-            }
-            
-            if (isPlayer) {
-                pPleasure += skill.selfD;
-                ePleasure += skill.oppD;
-            } else {
-                ePleasure += skill.selfD;
-                pPleasure += skill.oppD;
-            }
+    
+             if (skill.hpR) {
+                  if (isPlayer) pHP += skill.hpR;
+                  else eHP += skill.hpR;
+             }
+    
+            let pleasureDamage = skill.oppD;
+    
+             // ⭐⭐ 癌症效果：炎司變得很不容易得到快感
+            if (!isPlayer && hasCancer) {
+                pleasureDamage = Math.floor(pleasureDamage * 0.65);   // 只剩 35% 快感傷害
+             }
+    
+           if (isPlayer) {
+               pPleasure += skill.selfD;
+               ePleasure += pleasureDamage;
+           } else {
+               ePleasure += skill.selfD;
+               pPleasure += pleasureDamage;
+           }
             
             pHP = Math.max(0, Math.min(100, pHP));
             eHP = Math.max(0, Math.min(100, eHP));
@@ -472,6 +490,8 @@
                 
                 textEl.innerHTML = `轟炎司狂喜地抱緊你，眼裡滿是愛意：<br>「真的要生下來嗎？爸爸好開心……爸爸會把你的孩子好好生下來……我們一起養他……❤️」`;
                 
+                updateEnemySkillsByBirth();   // ← 關鍵：更新技能
+                
                         // 更新生胎記錄
                 updateBirthRecord();
                 
@@ -492,6 +512,19 @@
             document.querySelectorAll('#pregnantModal button.choice-btn').forEach(btn => btn.style.display = 'none');
         }
         
+        
+         // 根據胎數調整炎司技能強度
+        function updateEnemySkillsByBirth() {
+         // 小穴縮緊越生越強
+             enemySkills[0].oppD = 28 + birthCount * 8;   // 基礎28，每胎+8
+    
+         // 英雄喘息越生越弱
+             const recoverSkill = enemySkills[5];
+             recoverSkill.hpR = Math.max(15, 42 - birthCount * 6);   // 每胎減少6，最低15
+             recoverSkill.shortDesc = `恢復${recoverSkill.hpR}體力，-35快感（冷卻2）`;
+         }
+        
+                
         
           // 更新生胎記錄顯示
         function updateBirthRecord() {
@@ -515,12 +548,18 @@
                 document.getElementById('skills-grid').parentNode.insertBefore(recordEl, document.getElementById('skills-grid').nextSibling);
               }   
               recordEl.innerHTML = `轟炎司已經生了 <span style="color:#ff4dff; font-size:22px;">${birthCount}</span> 胎`;
+              
+                // 動態解鎖技能（透過重新渲染技能欄）
+              renderSkills();
+              
         }
         
+ 
+
         
         function showCancerEnding() {
             gameEnded = true;
-
+            hasCancer = true;      // ← 關鍵：標記癌症狀態
             unlockCG('cancer');
 
             const img = document.getElementById('cgImage');
