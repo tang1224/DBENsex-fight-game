@@ -284,7 +284,7 @@
                img: "cg_cancer.PNG"
             },
             intrude: {
-               name: "失💓禁💓高💓潮",
+               name: "失💓禁💓高💓潮💓",
                img: "cg_intrude.PNG"
             }
         };
@@ -377,7 +377,7 @@
             if (gameEnded) return true;
 
             // 😱 闖入事件（戰鬥中）
-            if (Math.random() < 0.1) {
+            if (Math.random() < 0.08) {
                 showIntrudeEnding();
                 return true;
              }
@@ -482,6 +482,9 @@
             const img = document.getElementById('cgImage');
             img.src = CG_LIST.cancer.img;
             img.style.display = 'block';
+            
+            document.getElementById('pregnantModal').querySelector('h2').innerHTML = 
+             '❗ 意外！ ❗';   // 改成意外！
 
             const textEl = document.getElementById('pregnantText');
             textEl.innerHTML =  `
@@ -521,6 +524,9 @@
             const img = document.getElementById('cgImage');
             img.src = CG_LIST.intrude.img;
             img.style.display = 'block';
+            
+            document.getElementById('pregnantModal').querySelector('h2').innerHTML = 
+             '❗ 意外！ ❗';   // 改成意外！
 
             const textEl = document.getElementById('pregnantText');
             textEl.innerHTML = `……但在最後一刻，房門被突然推開。<br><br>
