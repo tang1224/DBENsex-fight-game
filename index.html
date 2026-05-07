@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -7,6 +8,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>性愛格鬥 - 轟燈矢 vs 轟炎司</title>
     <style>
+    
+     /* 夢幻緩慢 + 彩虹漸層版 */
+        .heart {
+         position: fixed;
+         font-size: 13px;
+         pointer-events: none;
+         z-index: 99999;
+         animation: floatHeartRainbow 2.8s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+         user-select: none;
+         background: linear-gradient(90deg, 
+          #ff4d94, #ff69b4, #ff8cff, 
+          #c084fc, #a78bfa, #7dd3fc, #67e8f9);
+         -webkit-background-clip: text;
+         -webkit-text-fill-color: transparent;
+         filter: drop-shadow(0 0 12px currentColor);
+        }
+
+        @keyframes floatHeartRainbow {
+          0% {
+           transform: scale(0.4) translateY(0) rotate(-20deg);
+           opacity: 0.95;
+           filter: drop-shadow(0 0 12px #ff4d94) hue-rotate(0deg);
+          }
+
+          50% {
+           transform: scale(1.08) translateY(-190px) rotate(15deg);
+           filter: drop-shadow(0 0 22px #a78bfa) hue-rotate(180deg);
+          }
+
+          75% {
+           transform: scale(1.12) translateY(-200px) rotate(20deg);
+           filter: drop-shadow(0 0 20px #67e8f9) hue-rotate(260deg);
+          }
+    
+          100% {
+           transform: scale(0.7) translateY(-300px) rotate(35deg);
+           opacity: 0;
+           filter: drop-shadow(0 0 8px #ff69b4) hue-rotate(360deg);
+          }
+        }
+    
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
         
         :root {
@@ -19,6 +61,9 @@
         }
         
         * { margin:0; padding:0; box-sizing:border-box; }
+        
+
+        
         body {
             font-family: 'Noto Sans TC', system-ui, sans-serif;
             background: linear-gradient(180deg, #1f1b2e 0%, #16121f 100%);
@@ -29,7 +74,7 @@
             flex-direction: column;
             align-items: center;
         }
-        
+            
         #app {
             width: 100%;
             max-width: 480px;
@@ -114,11 +159,28 @@
         .cooldown { position: absolute; top: 6px; right: 6px; background: #ff4d94; color: white; font-size: 10px; padding: 2px 6px; border-radius: 9999px; }
         
         .modal, #pregnantModal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 9999; }
-        .modal-content { background: #2a2438; width: 92%; max-width: 420px; border-radius: 20px; padding: 28px 24px; text-align: center; border: 4px solid #ff4d4d; }
+        .modal-content { max-height: 85vh; overflow-y: auto;border-radius: 24px;background: #2a2438; width: 92%; max-width: 420px; border-radius: 20px; padding: 28px 24px; text-align: center; border: 4px solid #ff4d4d; }
         #pregnantModal .modal-content { background: linear-gradient(180deg, #ff99cc, #ff4d94); border: 4px solid #fff; color: #fff; box-shadow: 0 0 30px #ff69b4; }
         
         button.restart, button.choice-btn { background: linear-gradient(90deg, #ff4d94, #ff8c00); color: white; border: none; padding: 14px 28px; font-size: 18px; font-weight: 700; border-radius: 9999px; width: 100%; margin-top: 16px; cursor: pointer; }
         .choice-btn { display: inline-block; width: 48%; margin: 10px 1%; }
+        .gallery-btn {
+           background: rgba(255,255,255,0.08);
+           border: 2px solid #ff4d94;
+           color: #ff99cc;
+           padding: 6px 12px;
+           font-size: 13px;
+           border-radius: 10px;
+         }
+
+        .gallery-btn:hover {
+           transform: translateY(-1px);
+           box-shadow: 0 6px 14px rgba(255,77,148,0.6);
+         }
+
+        .gallery-btn:active {
+          transform: scale(0.96);
+         }
     </style>
 </head>
 <body>
@@ -127,14 +189,14 @@
         
         <div class="status-container">
             <div class="player-panel">
-                <div class="name">轟燈矢 🔥 👤</div>
+                <div class="name">轟燈矢 🏹 🐍</div>
                 <div class="bars">
                     <div class="bar-group"><div class="bar-label"><span>體力</span><span id="p-hp-text">100/100</span></div><div class="bar-outer"><div id="p-hp-bar" class="bar-inner stamina-bar" style="width:100%"></div></div></div>
                     <div class="bar-group"><div class="bar-label"><span>快感</span><span id="p-pleasure-text">0/100</span></div><div class="bar-outer"><div id="p-pleasure-bar" class="bar-inner pleasure-bar" style="width:0%"></div></div></div>
                 </div>
             </div>
             <div class="enemy-panel">
-                <div class="name">轟炎司 💥 👔</div>
+                <div class="name">轟炎司 🔥 🦧</div>
                 <div class="bars">
                     <div class="bar-group"><div class="bar-label"><span>體力</span><span id="e-hp-text">100/100</span></div><div class="bar-outer"><div id="e-hp-bar" class="bar-inner stamina-bar" style="width:100%"></div></div></div>
                     <div class="bar-group"><div class="bar-label"><span>快感</span><span id="e-pleasure-text">0/100</span></div><div class="bar-outer"><div id="e-pleasure-bar" class="bar-inner pleasure-bar" style="width:0%"></div></div></div>
@@ -142,6 +204,10 @@
             </div>
         </div>
         
+        <div style="text-align:right; padding:0 16px;">
+        <button class="gallery-btn" onclick="openGallery()" style="font-size:13px; padding:5px 10px;">
+    💞轟家相簿💞</button>
+        </div>
         <div id="log" class="log-container"></div>
         <div id="skills-grid" class="skills-grid"></div>
     </div>
@@ -164,15 +230,34 @@
     <!-- 隱藏懷孕結局 Modal -->
     <div id="pregnantModal" class="modal">
         <div class="modal-content">
-            <h2 style="color:#fff; margin-bottom:16px;">❤️ 轟炎司懷孕了 ❤️</h2>
+            <h2 style="color:#fff; margin-bottom:16px;">❤️轟炎司懷孕了❤️</h2>
+            <img id="cgImage" style="width:100%; border-radius:12px; margin-bottom:12px; display:none;">
             <div id="pregnantText" style="font-size:16px; line-height:1.7; margin:20px 0; color:#fff;"></div>
             <div style="margin:25px 0;">
+              <div id="choiceArea" style="margin:25px 0;">
                 <button onclick="chooseBirth(true)" class="choice-btn">生下來</button>
                 <button onclick="chooseBirth(false)" class="choice-btn">墮掉</button>
+              </div>  
             </div>
             <button onclick="restartGame()" class="restart" style="background:#fff; color:#ff4d94;">🔄 再來一局</button>
         </div>
     </div>
+    <div id="cgZoom" onclick="closeCGZoom()" style="
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,0.9);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            z-index:99999;
+        ">
+            <img id="cgZoomImg" style="
+                max-width:90%;
+                max-height:90%;
+                border-radius:12px;
+                box-shadow:0 0 30px rgba(255,77,153,0.6);
+            ">
+        </div>    
 
     <script>
         let pHP = 100, pPleasure = 0;
@@ -180,9 +265,18 @@
         let round = 0;
         let gameEnded = false;
         let winStreak = 0;
+        let birthCount = 0;        // ← 新增：生胎計數器
+        let hasCancer = false;   // ← 新增：是否罹患睪丸癌
 
         let pCooldown = new Array(6).fill(0);
         let eCooldown = new Array(6).fill(0);
+        let cgUnlocked = {
+            pregnant: false,
+            birth: false,
+            abort: false
+        };//解鎖狀態
+        let popSound; 
+
 
         const WIN_STREAK_REQUIRED = 3;   // ←←← 測試用3，正式版請改成5
 
@@ -198,7 +292,13 @@
             {id:4, name:"火焰SM", shortDesc:"消耗35體力，對方+82快感（冷卻4）", cost:35, oppD:82, selfD:25, hpR:0, cd:4,
              flavors:["你用火焰在老爸屁股和胸口畫出淫紋，一邊猛幹一邊燒：「老爸…火焰對你只是小case吧？那就好好被兒子玩…」","火焰SM讓老爸全身發燙，你笑得病嬌."]},
             {id:5, name:"喘息恢復", shortDesc:"恢復40體力，-30快感（冷卻3）", cost:0, oppD:0, selfD:-30, hpR:40, cd:3,
-             flavors:["你深呼吸壓下快感，繼續用病嬌眼神盯著老爸：「還沒玩夠…」"]}
+             flavors:["你深呼吸壓下快感，繼續用病嬌眼神盯著老爸：「還沒玩夠…」"]},
+            // 新增技能（預設先隱藏）
+            {id:6, name:"孕肚玩弄", shortDesc:"消耗28體力，對方+65快感（需3胎）", cost:28, oppD:65, selfD:12, hpR:0, cd:2,
+             flavors:["你輕柔又病態地揉捏老爸圓潤的孕肚，在他耳邊低語：「這裡面……有我的孩子……」","你一邊抽插一邊按壓孕肚，感受裡面的胎動。"]},
+            {id:7, name:"乳汁榨取", shortDesc:"消耗32體力，對方+78快感（需5胎）", cost:32, oppD:78, selfD:18, hpR:0, cd:3,
+             flavors:["你低頭含住老爸腫脹的乳頭，用力吸吮噴出的乳汁：「老爸的奶……好甜……」","你一邊猛幹一邊大力擠奶，乳汁噴得兩人滿身都是。"]}
+
         ];
 
         const enemySkills = [
@@ -215,6 +315,29 @@
             {id:5, name:"英雄喘息", shortDesc:"恢復42體力，-35快感（冷卻2）", cost:0, oppD:0, selfD:-35, hpR:42, cd:2,
              flavors:["轟炎司努力壓下快感，後穴依然微微抽動…"]}
         ];
+        //統一CG資料
+        const CG_LIST = {
+            pregnant: {
+               name: "悄然結果",
+               img: "cg_pregnant.PNG"
+            },
+            birth: {
+               name: "血脈延續",
+               img: "cg_birth.PNG"
+            },
+            abort: {
+               name: "被深愛者親手摧毀",
+               img: "cg_abort.PNG"
+            },
+            cancer: {
+               name: "錯誤的兩條線",
+               img: "cg_cancer.PNG"
+            },
+            intrude: {
+               name: "失💓禁💓高💓潮💓",
+               img: "cg_intrude.PNG"
+            }
+        };
 
         function log(html) {
             const logEl = document.getElementById('log');
@@ -245,6 +368,10 @@
             const grid = document.getElementById('skills-grid');
             grid.innerHTML = '';
             playerSkills.forEach((sk, i) => {
+                      // 條件判斷
+                   if (sk.id === 6 && birthCount < 3) return;   // 孕肚玩弄需3胎
+                   if (sk.id === 7 && birthCount < 5) return;   // 乳汁榨取需5胎
+        
                 const disabled = pCooldown[i] > 0 || pHP < sk.cost;
                 const btn = document.createElement('div');
                 btn.className = `skill-btn ${disabled ? 'disabled' : ''}`;
@@ -265,19 +392,26 @@
             
             if (isPlayer) pHP -= skill.cost;
             else eHP -= skill.cost;
-            
-            if (skill.hpR) {
-                if (isPlayer) pHP += skill.hpR;
-                else eHP += skill.hpR;
-            }
-            
-            if (isPlayer) {
-                pPleasure += skill.selfD;
-                ePleasure += skill.oppD;
-            } else {
-                ePleasure += skill.selfD;
-                pPleasure += skill.oppD;
-            }
+    
+             if (skill.hpR) {
+                  if (isPlayer) pHP += skill.hpR;
+                  else eHP += skill.hpR;
+             }
+    
+            let pleasureDamage = skill.oppD;
+    
+             // ⭐⭐ 癌症效果：炎司變得很不容易得到快感
+            if (!isPlayer && hasCancer) {
+                pleasureDamage = Math.floor(pleasureDamage * 0.65);   // 只剩 35% 快感傷害
+             }
+    
+           if (isPlayer) {
+               pPleasure += skill.selfD;
+               ePleasure += pleasureDamage;
+           } else {
+               ePleasure += skill.selfD;
+               pPleasure += pleasureDamage;
+           }
             
             pHP = Math.max(0, Math.min(100, pHP));
             eHP = Math.max(0, Math.min(100, eHP));
@@ -299,8 +433,20 @@
             log(html);
             updateBars();
         }
+        
+        function checkSpecialEvents() {
+            if (gameEnded) return true;
 
-        function checkEnd() {
+            // 😱 闖入事件（戰鬥中）
+            if (Math.random() < 0.08) {
+                showIntrudeEnding();
+                return true;
+             }
+
+            return false;
+        }
+
+         function checkEnd() {
             if (gameEnded) return true;
             let isWin = (ePleasure >= 100 || eHP <= 0);
             let title = '', resultText = '';
@@ -314,11 +460,16 @@
                 title = "🎉 你贏了！操壞老爸";
                 resultText = `轟炎司徹底被你操壞…`;
 
-                if (winStreak >= WIN_STREAK_REQUIRED) {
-                    winStreak = 0; //gpt改
-                    showPregnantModal();
+                 if (winStreak >= WIN_STREAK_REQUIRED) {
+                    const roll = Math.random();
+                    if (roll < 0.8) {
+                     showPregnantModal(); // 80%
+                    } else {
+                     showCancerEnding(); // 20%（自動吃剩下的）
+                    }
+                    winStreak = 0;
                     return true;
-                }
+                 }
             } else if (pHP <= 0) {
                 title = "😩 你輸了…";
                 resultText = `你累癱在老爸懷裡…`;
@@ -342,12 +493,25 @@
 
         function showPregnantModal() {
             gameEnded = true;
+            
+            // ⭐ 解鎖「懷孕CG」
+            unlockCG('pregnant');
+            
+            //標題
+            document.getElementById('pregnantModal').querySelector('h2').innerHTML = 
+             '💓轟炎司懷孕了💓️';   
+
+            
+            // ⭐ 設定CG圖片
+            const img = document.getElementById('cgImage');
+            img.src = CG_LIST.pregnant.img; // 換成你的圖
+            img.style.display = 'block';
+            
             const textEl = document.getElementById('pregnantText');
             textEl.innerHTML = `轟炎司高潮後摸著小腹，臉紅到耳根，聲音顫抖又色情地說：<br><br>
             「燈矢……老爸被你射得太多了……好像真的懷孕了……肚子裡有你的孩子了……好羞恥……但好幸福……❤️」`;
             
-           // ⭐⭐ 加這段：重置選項按鈕 ⭐⭐
-
+            // ⭐⭐ 加這段：重置選項按鈕 ⭐⭐
             document.querySelectorAll('#pregnantModal button.choice-btn')
                 .forEach(btn => btn.style.display = 'inline-block');
             document.getElementById('pregnantModal').style.display = 'flex';
@@ -355,18 +519,176 @@
 
         function chooseBirth(isBirth) {
             const textEl = document.getElementById('pregnantText');
+            const img = document.getElementById('cgImage'); // ⭐ 抓圖片
             if (isBirth) {
+              
+                birthCount++; // 每次生下來就 +1
+                      
+                      // ⭐ 解鎖「生下來」
+                unlockCG('birth');
+                      // ⭐ 換圖
+
+                img.src = CG_LIST.birth.img;
+                
                 textEl.innerHTML = `轟炎司狂喜地抱緊你，眼裡滿是愛意：<br>「真的要生下來嗎？爸爸好開心……爸爸會把你的孩子好好生下來……我們一起養他……❤️」`;
+                
+                updateEnemySkillsByBirth();   // ← 關鍵：更新技能
+                
+                        // 更新生胎記錄
+                updateBirthRecord();
+                
             } else {
+                      // ⭐ 解鎖「墮掉」
+                unlockCG('abort');
+                      // ⭐ 換圖
+
+                img.src = CG_LIST.abort.img;
+
+                document.getElementById('pregnantModal').querySelector('h2').innerHTML = 
+                 '爸爸只能看著我一個👁️';   
+
+        
                 textEl.innerHTML = `轟炎司愧疚又絕望地低頭，眼淚滑落：<br>「……要墮掉嗎？爸爸居然被自己的兒子搞到懷孕……好對不起你……爸爸真的壞掉了……」`;
+
             }
             document.querySelectorAll('#pregnantModal button.choice-btn').forEach(btn => btn.style.display = 'none');
         }
+        
+        
+         // 根據胎數調整炎司技能強度
+        function updateEnemySkillsByBirth() {
+         // 小穴縮緊越生越強
+             enemySkills[0].oppD = 28 + birthCount * 8;   // 基礎28，每胎+8
+    
+         // 英雄喘息越生越弱
+             const recoverSkill = enemySkills[5];
+             recoverSkill.hpR = Math.max(15, 42 - birthCount * 6);   // 每胎減少6，最低15
+             recoverSkill.shortDesc = `恢復${recoverSkill.hpR}體力，-35快感（冷卻2）`;
+         }
+        
+                
+        
+          // 更新生胎記錄顯示
+        function updateBirthRecord() {
+             let recordEl = document.getElementById('birthRecord');
+             if (!recordEl) {
+              // 第一次建立
+                 recordEl = document.createElement('div');
+                 recordEl.id = 'birthRecord';
+                 recordEl.style.cssText = `
+                  text-align: center;
+                  margin: 12px 16px 8px;
+                  font-size: 18px;
+                  font-weight: 700;
+                  color: #fff;
+                  text-shadow: 
+                     0 0 10px #ff4dff,
+                     0 0 20px #ff4dff,
+                     0 0 30px #ff69b4;
+                  letter-spacing: 1px;
+                 `;
+                document.getElementById('skills-grid').parentNode.insertBefore(recordEl, document.getElementById('skills-grid').nextSibling);
+              }   
+              recordEl.innerHTML = `轟炎司已經生了 <span style="color:#ff4dff; font-size:22px;">${birthCount}</span> 胎`;
+              
+                // 動態解鎖技能（透過重新渲染技能欄）
+              renderSkills();
+              
+        }
+        
+ 
+
+        
+        function showCancerEnding() {
+            gameEnded = true;
+            hasCancer = true;      // ← 關鍵：標記癌症狀態
+            unlockCG('cancer');
+
+            const img = document.getElementById('cgImage');
+            img.src = CG_LIST.cancer.img;
+            img.style.display = 'block';
+            
+            document.getElementById('pregnantModal').querySelector('h2').innerHTML = 
+             '❗ 意外！ ❗';   // 改成意外！
+
+            const textEl = document.getElementById('pregnantText');
+            textEl.innerHTML =  `
+        驗孕棒上清晰地出現了兩條紅線。<br><br>
+        
+        轟炎司愣在床上，手指微微發抖。<br>
+        燈矢從後面抱住他，下巴抵在他肩上，低聲笑著問：<br><br>
+        
+        「老爸……你真的被我搞大了嗎？」<br><br>
+        
+        幾天後的醫院檢查結果出來了。<br>
+        醫生面色凝重地告訴他們：<br><br>
+        
+        「不是懷孕……是睪丸癌，而且已經擴散，需要進行切除手術。」<br><br>
+        
+        炎司呆坐在診療室，臉色蒼白。<br>
+        燈矢卻緊緊握著他的手用莫名愉悅的語氣說：<br><br>
+        
+        「沒睪丸也沒關係……<br>
+        就算切掉蛋蛋後還是能愛愛的💓 不管是孩子還是癌症……<br>
+        只要是老爸身體裡的東西⋯⋯都是我一個人的～<br>
+        我會好好把兩顆蛋蛋放進罐子泡福馬林保存的🫶」
+        `;
+                 // ❌ 把選項隱藏
+
+            document.querySelectorAll('#pregnantModal button.choice-btn')
+                   .forEach(btn => btn.style.display = 'none');
+
+            document.getElementById('pregnantModal').style.display = 'flex';
+        }
+        
+        
+        function showIntrudeEnding() {
+            gameEnded = true;
+
+            unlockCG('intrude');
+
+            const img = document.getElementById('cgImage');
+            img.src = CG_LIST.intrude.img;
+            img.style.display = 'block';
+            
+            document.getElementById('pregnantModal').querySelector('h2').innerHTML = 
+             '❗ 意外！ ❗';   // 改成意外！
+
+            const textEl = document.getElementById('pregnantText');
+            textEl.innerHTML = `
+        ……就在燈矢從後面緊緊抱住炎司，粗硬的肉棒深深埋在裡面猛烈抽插時，<br><br>
+        
+        <strong>喀啦——</strong><br><br>
+        
+        房門突然被推開。<br><br>
+        
+        焦凍站在門口，整個人僵住。<br><br>
+        
+        他看見的是極其淫亂的一幕——<br>
+        父親被哥哥從後面牢牢抱住<br>
+        哥哥的肉棒正凶狠地一下一下撞進父親的後穴，發出淫靡的水聲。<br>
+        而父親的雙腿發軟，前端正不受控制地噴出黃色的尿液，
+        一道又一道羞恥的熱流沿著大腿根部往下淌，滴落在床單上……<br><br>
+        
+        轟炎司瞬間全身僵硬，瞳孔劇烈收縮，失禁的尿液噴得更兇，
+        整個人像壞掉的玩具不停顫抖、哭喊：<br><br>
+        
+        「……不……不要看……！！焦凍……別看爸爸……啊啊啊……！！」<br><br>
+        
+        燈矢卻更用力地抱緊他，在他耳邊低語：<br>
+        「轟炎司……被焦凍看到你尿失禁的樣子了……
+        真淫亂啊……」`;
+        
+            document.querySelectorAll('#pregnantModal button.choice-btn')
+                   .forEach(btn => btn.style.display = 'none');
+
+            document.getElementById('pregnantModal').style.display = 'flex';
+        }
+
 
         function playerUseSkill(i) {
             if (gameEnded || pCooldown[i] > 0 || pHP < playerSkills[i].cost) return;
-            
-            round++; //💥gpt改
+           
             
             executeSkill(true, i);
             if (checkEnd()) return;
@@ -375,6 +697,9 @@
 
         function aiTurn() {
             if (gameEnded) return;
+            
+                // ⭐ 插在這裡
+            if (checkSpecialEvents()) return;
             
             round++;
             
@@ -425,8 +750,133 @@
             renderSkills();
             log(`<strong style="color:#ff8c00">第1回合開始！連續勝利 ${winStreak}/${WIN_STREAK_REQUIRED}</strong>`);
         }
+        
+        
+        function openGallery() {
+        let html = `
+               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <h3 style="margin:0; color:#ff99cc;">💞 轟家相簿</h3>
+              <button onclick="closeModal()" style="background:none; border:none; color:#ff99cc; font-size:20px; cursor:pointer;">✕</button>
+               </div>
+        
+               <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-height:380px; overflow-y:auto; padding-right:8px;">
+            `;
+
+        for (let key in CG_LIST) {
+          const cg = CG_LIST[key];
+          const isUnlocked = cgUnlocked[key];
+
+          html += `
+            <div onclick="${isUnlocked ? `openCGZoom('${cg.img}')` : ''}" 
+                 style="cursor: ${isUnlocked ? 'pointer' : 'default'}; border-radius:12px; overflow:hidden; background:#111; position:relative;">
+                
+                <img src="${cg.img}" 
+                     loading="lazy"
+                     style="width:100%; display:block; 
+                            filter: ${isUnlocked ? 'none' : 'blur(12px) brightness(0.5)'}; 
+                            opacity: ${isUnlocked ? '1' : '0.5'};">
+                
+                <div style="position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent, rgba(0,0,0,0.85)); padding:10px 6px; font-size:13px; text-align:center;">
+                    ${isUnlocked ? cg.name : '？？？'}
+                </div>
+            </div>
+          `;
+         }
+
+          html += `</div>`;
+
+            document.getElementById('modal-title').innerHTML = "";
+            document.getElementById('modal-result').innerHTML = html;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        // 新增關閉 modal 的函式
+        function closeModal() {
+           document.getElementById('modal').style.display = 'none';
+        }
+        
+        
+        function unlockCG(key) {
+            if (!cgUnlocked[key]) {
+                cgUnlocked[key] = true;
+                log(`🔔 解鎖CG：「${CG_LIST[key].name}」`);
+            }
+        }//解鎖函式（共用的
+        
+        function openCGZoom(src) {
+            const zoom = document.getElementById('cgZoom');
+            const img = document.getElementById('cgZoomImg');
+
+            img.src = src;
+            zoom.style.display = 'flex';
+        }
+
+        function closeCGZoom() {
+            document.getElementById('cgZoom').style.display = 'none';
+        }
+        
+        
+// ============ 點擊愛心特效 - 加強版 ============
+function createHeart(x, y) {
+    // 一次產生 3~5 顆愛心
+    const count = 1 + Math.floor(Math.random() * 3);
+    
+    playPopSound();   // ← 每次點擊都播放 pop 音效
+    
+    for (let i = 0; i < count; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        
+        const hearts = ['❤️', '💕', '💖', '💗', '💘', '💓', '💞'];
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        
+        // 隨機顏色（粉到紫紅）
+        const hue = 310 + Math.random() * 40;
+        heart.style.color = `hsl(${hue}, 100%, 78%)`;
+
+        // ⭐ 隨機大小（很重要）
+        heart.style.fontSize = (18 + Math.random() * 18) + 'px';
+
+        
+        // ⭐ 隨機位置偏移
+        heart.style.left = (x + (Math.random() - 0.5) * 60) + 'px';
+        heart.style.top = (y + (Math.random() - 0.5) * 40) + 'px';
+
+        // 隨機旋轉與延遲
+        heart.style.animationDelay = (Math.random() * 0.15) + 's';
+        heart.style.transform = `rotate(${Math.random() * 60 - 30}deg)`;
+        
+        heart.style.fontSize = (18 + Math.random() * 18) + "px";
+        
+        document.body.appendChild(heart);
+        
+        setTimeout(() => heart.remove(), 1500);
+    }
+}
+
+        // ============ 啵啵 / Kiss 音效（解決重複無聲問題） ============
+         function playPopSound() {
+              if (popSound) {
+                  popSound.currentTime = 0;        // 每次從頭播放
+                    popSound.play().catch(() => {});
+              } 
+          }
+
+
+// 全畫面點擊（任何地方都有效果 + 音效）
+document.addEventListener('click', (e) => {
+    if (e.target.closest('.modal') || e.target.closest('#cgZoom')) return;
+    
+    playPopSound();           // 任何點擊都有啵啵聲
+    createHeart(e.clientX, e.clientY);
+});
 
         window.onload = () => {
+          
+            popSound = new Audio('pop.mp3');
+            popSound.volume = 0.7;
+            popSound.preload = 'auto';
+          
             updateBars();
             renderSkills();
             log(`<strong style="color:#ff4d4d">性愛格鬥開始！</strong><br>連續贏 ${WIN_STREAK_REQUIRED} 次可觸發隱藏懷孕結局`);
