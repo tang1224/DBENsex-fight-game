@@ -8,6 +8,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>性愛格鬥 - 轟燈矢 vs 轟炎司</title>
     <style>
+    
+     /* 夢幻緩慢 + 彩虹漸層版 */
+        .heart {
+         position: fixed;
+         font-size: 13px;
+         pointer-events: none;
+         z-index: 99999;
+         animation: floatHeartRainbow 2.8s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+         user-select: none;
+         background: linear-gradient(90deg, 
+          #ff4d94, #ff69b4, #ff8cff, 
+          #c084fc, #a78bfa, #7dd3fc, #67e8f9);
+         -webkit-background-clip: text;
+         -webkit-text-fill-color: transparent;
+         filter: drop-shadow(0 0 12px currentColor);
+        }
+
+        @keyframes floatHeartRainbow {
+          0% {
+           transform: scale(0.4) translateY(0) rotate(-20deg);
+           opacity: 0.95;
+           filter: drop-shadow(0 0 12px #ff4d94) hue-rotate(0deg);
+          }
+
+          50% {
+           transform: scale(1.08) translateY(-190px) rotate(15deg);
+           filter: drop-shadow(0 0 22px #a78bfa) hue-rotate(180deg);
+          }
+
+          75% {
+           transform: scale(1.12) translateY(-200px) rotate(20deg);
+           filter: drop-shadow(0 0 20px #67e8f9) hue-rotate(260deg);
+          }
+    
+          100% {
+           transform: scale(0.7) translateY(-300px) rotate(35deg);
+           opacity: 0;
+           filter: drop-shadow(0 0 8px #ff69b4) hue-rotate(360deg);
+          }
+        }
+    
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
         
         :root {
@@ -234,6 +275,10 @@
             birth: false,
             abort: false
         };//解鎖狀態
+        
+      // 音效
+        const chuSound = new Audio('chu.mp3');
+        chuSound.volume = 0.6;        // 音量可調整（0.0 ~ 1.0）
         
 
         const WIN_STREAK_REQUIRED = 3;   // ←←← 測試用3，正式版請改成5
@@ -581,12 +626,12 @@
         幾天後的醫院檢查結果出來了。<br>
         醫生面色凝重地告訴他們：<br><br>
         
-        「不是懷孕……是睪丸癌，而且已經擴散，恐怕要進行睪丸切除手術。」<br><br>
+        「不是懷孕……是睪丸癌，而且已經擴散。」<br><br>
         
         炎司呆坐在診療室，臉色蒼白。<br>
-        燈矢卻緊緊握著他的手，在他耳邊輕聲說：<br><br>
+        燈矢卻緊緊握著他的手，病嬌地在他耳邊輕聲說：<br><br>
         
-        「爸爸沒睪丸也沒關係……不管是孩子還是癌症……<br>
+        「沒關係……不管是孩子還是癌症……<br>
         只要是老爸身體裡的東西……<br>
         都是我一個人的。<br>
         我會陪你到最後的……❤️」`;
@@ -772,6 +817,59 @@
             document.getElementById('cgZoom').style.display = 'none';
         }
         
+        
+// ============ 點擊愛心特效 - 加強版 ============
+function createHeart(x, y) {
+    // 一次產生 3~5 顆愛心
+    const count = 1 + Math.floor(Math.random() * 3);
+    
+    
+    // 播放啾啾聲（每次點擊都播）
+    chuSound.currentTime = 0;   // 重置播放位置
+    chuSound.play().catch(() => {});   // 避免第一次點擊被瀏覽器擋
+        
+    
+    for (let i = 0; i < count; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        
+        const hearts = ['❤️', '💕', '💖', '💗', '💘', '💓', '💞'];
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        
+        // 隨機顏色（粉到紫紅）
+        const hue = 310 + Math.random() * 40;
+        heart.style.color = `hsl(${hue}, 100%, 78%)`;
+
+        // ⭐ 隨機大小（很重要）
+        heart.style.fontSize = (18 + Math.random() * 18) + 'px';
+
+        
+        // ⭐ 隨機位置偏移
+        heart.style.left = (x + (Math.random() - 0.5) * 60) + 'px';
+        heart.style.top = (y + (Math.random() - 0.5) * 40) + 'px';
+
+        // 隨機旋轉與延遲
+        heart.style.animationDelay = (Math.random() * 0.15) + 's';
+        heart.style.transform = `rotate(${Math.random() * 60 - 30}deg)`;
+        
+        heart.style.fontSize = (18 + Math.random() * 18) + "px";
+        
+        document.body.appendChild(heart);
+        
+        setTimeout(() => heart.remove(), 1500);
+    }
+}
+
+
+
+// 全畫面點擊監聽
+document.addEventListener('click', (e) => {
+    // 避免在按鈕、技能、modal上也狂噴（可自行調整）
+    if (e.target.closest('button') || e.target.closest('.skill-btn') || e.target.closest('.modal')) {
+        return;
+    }
+    createHeart(e.clientX, e.clientY);
+});
         
 
         window.onload = () => {
