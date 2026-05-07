@@ -278,7 +278,7 @@
         
         // 音效
         const chuSound = new Audio('pop.mp3');
-          chuSound.volume = 0.6;        // 音量可調整（0.0 ~ 1.0）
+              chuSound.volume = 0.6;        // 音量可調整（0.0 ~ 1.0）
         
 
         const WIN_STREAK_REQUIRED = 3;   // ←←← 測試用3，正式版請改成5
@@ -824,7 +824,7 @@ function createHeart(x, y) {
     const count = 1 + Math.floor(Math.random() * 3);
     
     // 每次點擊都播放音效
-    playKissSound();
+    playPopSound();
     
     for (let i = 0; i < count; i++) {
         const heart = document.createElement('div');
@@ -857,21 +857,21 @@ function createHeart(x, y) {
     }
 }
 
-// ============ 啵啵 / Kiss 音效（解決重複無聲問題） ============
-function playKissSound() {
-    const sound = new Audio('chu.mp3');   // 每次都建立新的 Audio 物件
-    sound.volume = 0.65;                  // 音量可調整
-    sound.play().catch(() => {});         // 防止第一次被瀏覽器阻擋
-}
+        // ============ 啵啵 / Kiss 音效（解決重複無聲問題） ============
+         function playPopSound() {
+          const sound = new Audio('pop.mp3');   // 每次都建立新的 Audio 物件
+          sound.volume = 0.65;                  // 音量可調整
+          sound.play().catch(() => {});         // 防止第一次被瀏覽器阻擋
+        }
 
-// 全畫面點擊監聽
-document.addEventListener('click', (e) => {
-    // 避免在按鈕、技能、modal上也狂噴（可自行調整）
-    if (e.target.closest('button') || e.target.closest('.skill-btn') || e.target.closest('.modal')) {
-        return;
-    }
-    createHeart(e.clientX, e.clientY);
-});
+        // 全畫面點擊監聽
+      document.addEventListener('click', (e) => {
+        // 避免在按鈕、技能、modal上也狂噴（可自行調整）
+        if (e.target.closest('button') || e.target.closest('.skill-btn') || e.target.closest('.modal')) {
+            return;
+        }
+        createHeart(e.clientX, e.clientY);
+      });
         
 
         window.onload = () => {
