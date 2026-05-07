@@ -275,11 +275,8 @@
             birth: false,
             abort: false
         };//解鎖狀態
-        
-        // 音效
-        const chuSound = new Audio('pop.mp3');
-              chuSound.volume = 0.6;        // 音量可調整（0.0 ~ 1.0）
-        
+        let popSound; 
+
 
         const WIN_STREAK_REQUIRED = 3;   // ←←← 測試用3，正式版請改成5
 
@@ -823,6 +820,8 @@ function createHeart(x, y) {
     // 一次產生 3~5 顆愛心
     const count = 1 + Math.floor(Math.random() * 3);
     
+    playPopSound();   // ← 每次點擊都播放 pop 音效
+    
     for (let i = 0; i < count; i++) {
         const heart = document.createElement('div');
         heart.className = 'heart';
@@ -856,20 +855,27 @@ function createHeart(x, y) {
 
         // ============ 啵啵 / Kiss 音效（解決重複無聲問題） ============
          function playPopSound() {
-          const sound = new Audio('pop.mp3');   // 每次都建立新的 Audio 物件
-          sound.volume = 0.65;                  // 音量可調整
-          sound.play().catch(() => {});         // 防止第一次被瀏覽器阻擋
-        }
+              if (popSound) {
+                  popSound.currentTime = 0;        // 每次從頭播放
+                    popSound.play().catch(() => {});
+              } 
+          }
 
 
-        // ============ 全畫面點擊監聽（任何地方都有效） ============
-        document.addEventListener('click', (e) => {
-        // 任何地方點擊都播放音效 + 愛心
-        playPopSound();
-        createHeart(e.clientX, e.clientY);
-        });
+// 全畫面點擊（任何地方都有效果 + 音效）
+document.addEventListener('click', (e) => {
+    if (e.target.closest('.modal') || e.target.closest('#cgZoom')) return;
+    
+    playPopSound();           // 任何點擊都有啵啵聲
+    createHeart(e.clientX, e.clientY);
+});
 
         window.onload = () => {
+          
+            popSound = new Audio('pop.mp3');
+            popSound.volume = 0.7;
+            popSound.preload = 'auto';
+          
             updateBars();
             renderSkills();
             log(`<strong style="color:#ff4d4d">性愛格鬥開始！</strong><br>連續贏 ${WIN_STREAK_REQUIRED} 次可觸發隱藏懷孕結局`);
