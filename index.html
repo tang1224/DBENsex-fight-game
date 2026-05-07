@@ -276,10 +276,6 @@
             abort: false
         };//解鎖狀態
         
-      // 音效
-        const chuSound = new Audio('chu.mp3');
-        chuSound.volume = 0.6;        // 音量可調整（0.0 ~ 1.0）
-        
 
         const WIN_STREAK_REQUIRED = 3;   // ←←← 測試用3，正式版請改成5
 
@@ -822,12 +818,6 @@
 function createHeart(x, y) {
     // 一次產生 3~5 顆愛心
     const count = 1 + Math.floor(Math.random() * 3);
-    
-    
-    // 播放啾啾聲（每次點擊都播）
-    chuSound.currentTime = 0;   // 重置播放位置
-    chuSound.play().catch(() => {});   // 避免第一次點擊被瀏覽器擋
-        
     
     for (let i = 0; i < count; i++) {
         const heart = document.createElement('div');
