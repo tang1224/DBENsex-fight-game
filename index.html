@@ -276,6 +276,10 @@
             abort: false
         };//解鎖狀態
         
+        // 音效
+        const chuSound = new Audio('pop.mp3');
+          chuSound.volume = 0.6;        // 音量可調整（0.0 ~ 1.0）
+        
 
         const WIN_STREAK_REQUIRED = 3;   // ←←← 測試用3，正式版請改成5
 
@@ -819,6 +823,9 @@ function createHeart(x, y) {
     // 一次產生 3~5 顆愛心
     const count = 1 + Math.floor(Math.random() * 3);
     
+    // 每次點擊都播放音效
+    playKissSound();
+    
     for (let i = 0; i < count; i++) {
         const heart = document.createElement('div');
         heart.className = 'heart';
@@ -850,7 +857,12 @@ function createHeart(x, y) {
     }
 }
 
-
+// ============ 啵啵 / Kiss 音效（解決重複無聲問題） ============
+function playKissSound() {
+    const sound = new Audio('chu.mp3');   // 每次都建立新的 Audio 物件
+    sound.volume = 0.65;                  // 音量可調整
+    sound.play().catch(() => {});         // 防止第一次被瀏覽器阻擋
+}
 
 // 全畫面點擊監聽
 document.addEventListener('click', (e) => {
