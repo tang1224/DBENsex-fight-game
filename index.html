@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -276,48 +275,6 @@
             abort: false
         };//解鎖狀態
         let popSound; 
-        
-        // ==================== 成就系統 ====================
-let achievements = {
-    firstPregnant: false,
-    threeChildren: false,
-    tenMother: false,
-    intrudeWitness: false,
-    cancerWitness: false
-};
-
-const ACHIEVEMENT_LIST = {
-    firstPregnant: { 
-        name: "初次受孕", 
-        desc: "讓炎司第一次懷上你的孩子", 
-        icon: "ach_first.PNG",           // ← 改成圖片檔名
-        size: 48                 // 可選：圖片大小(px)
-    },
-    threeChildren: { 
-        name: "三子之父", 
-        desc: "讓炎司生下三胎", 
-        icon: "ach_three.PNG", 
-        size: 52
-    },
-    tenMother: { 
-        name: "十胎母親", 
-        desc: "讓炎司生下十胎以上", 
-        icon: "ach_ten.PNG", 
-        size: 54
-    },
-    intrudeWitness: { 
-        name: "隨地便溺", 
-        desc: "被焦凍看見炎司失禁的模樣", 
-        icon: "ach_intrude.PNG", 
-        size: 48
-    },
-    cancerWitness: { 
-        name: "蛋蛋殺手", 
-        desc: "炎司罹患睪丸癌，割掉才能康復", 
-        icon: "ach_cancer.PNG", 
-        size: 48
-    }
-};
 
 
         const WIN_STREAK_REQUIRED = 3;   // ←←← 測試用3，正式版請改成5
@@ -593,12 +550,6 @@ const ACHIEVEMENT_LIST = {
                 textEl.innerHTML = `轟炎司愧疚又絕望地低頭，眼淚滑落：<br>「……要墮掉嗎？爸爸居然被自己的兒子搞到懷孕……好對不起你……爸爸真的壞掉了……」`;
 
             }
-            
-            if (birthCount === 1) unlockAchievement('firstPregnant');
-if (birthCount === 3) unlockAchievement('threeChildren');
-if (birthCount >= 10) unlockAchievement('tenMother');
-            
-            
             document.querySelectorAll('#pregnantModal button.choice-btn').forEach(btn => btn.style.display = 'none');
         }
         
@@ -694,8 +645,6 @@ if (birthCount >= 10) unlockAchievement('tenMother');
             gameEnded = true;
 
             unlockCG('intrude');
-
-unlockAchievement('intrudeWitness');
 
             const img = document.getElementById('cgImage');
             img.src = CG_LIST.intrude.img;
@@ -802,155 +751,43 @@ unlockAchievement('intrudeWitness');
         }
         
         
-function openGallery() {
-    document.getElementById('modal-title').innerHTML = "";
-    document.getElementById('modal-result').innerHTML = "";
-
-    let html = `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-            <h3 style="margin:0; color:#ff99cc; font-size:21px;">💞 轟家相簿 💞</h3>
-            <button onclick="closeModal()" style="background:none; border:none; color:#ff99cc; font-size:26px; cursor:pointer;">✕</button>
-        </div>
+        function openGallery() {
+        let html = `
+               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <h3 style="margin:0; color:#ff99cc;">💞 轟家相簿</h3>
+              <button onclick="closeModal()" style="background:none; border:none; color:#ff99cc; font-size:20px; cursor:pointer;">✕</button>
+               </div>
         
-        <!-- 簡單分頁 -->
-        <div style="display:flex; margin-bottom:14px; border-bottom:2px solid #3a2e4f;">
-            <button onclick="switchTab(0)" id="tab0" style="flex:1; padding:12px; background:#ff4d94; color:white; border:none; font-weight:700;">回憶CG</button>
-            <button onclick="switchTab(1)" id="tab1" style="flex:1; padding:12px; background:transparent; color:#ff99cc; border:none; font-weight:700;">成就列表</button>
-        </div>
-        
-        <div id="galleryContent"></div>
-    `;
+               <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-height:380px; overflow-y:auto; padding-right:8px;">
+            `;
 
-    document.getElementById('modal-result').innerHTML = html;
-    document.getElementById('modal').style.display = 'flex';
-    
-    switchTab(0);   // 預設顯示 CG
-
-     }
-
-// ==================== 分頁切換 ====================
-function switchTab(tab) {
-    const content = document.getElementById('galleryContent');
-    const tab0 = document.getElementById('tab0');
-    const tab1 = document.getElementById('tab1');
-
-    if (tab === 0) {
-        // CG 頁面 - 維持原本兩排陳列
-        tab0.style.background = '#ff4d94';
-        tab0.style.color = 'white';
-        tab1.style.background = 'transparent';
-        tab1.style.color = '#ff99cc';
-
-        let html = `<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:8px 4px;">`;
-        
         for (let key in CG_LIST) {
-            const cg = CG_LIST[key];
-            const isUnlocked = cgUnlocked[key] || false;
+          const cg = CG_LIST[key];
+          const isUnlocked = cgUnlocked[key];
 
-            html += `
-                <div onclick="${isUnlocked ? `openCGZoom('${cg.img}')` : ''}" 
-                     style="cursor: ${isUnlocked ? 'pointer' : 'default'}; border-radius:14px; overflow:hidden; background:#1a1428; position:relative; aspect-ratio:1/1;">
-                    <img src="${cg.img}" loading="lazy" 
-                         style="width:100%; height:100%; object-fit:cover; 
-                                filter: ${isUnlocked ? 'none' : 'blur(14px) brightness(0.4)'}; 
-                                opacity: ${isUnlocked ? '1' : '0.55'};">
-                    <div style="position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent, rgba(0,0,0,0.88)); padding:12px 8px; text-align:center; color:#fff; font-size:14.5px;">
-                        ${isUnlocked ? cg.name : '？？？'}
-                    </div>
-                </div>`;
-        }
-        html += `</div>`;
-        content.innerHTML = html;
-
-} else {
-    // 成就列表
-    tab0.style.background = 'transparent';
-    tab0.style.color = '#ff99cc';
-    tab1.style.background = '#ff4d94';
-    tab1.style.color = 'white';
-
-    let html = `<div style="padding:10px 6px;">`;
-    
-    for (let key in ACHIEVEMENT_LIST) {
-        const ach = ACHIEVEMENT_LIST[key];
-        const unlocked = achievements[key] || false;
-        
-        html += `
-            <div style="background:rgba(255,255,255,0.08); 
-                        margin:12px 0; 
-                        padding:16px; 
-                        border-radius:14px; 
-                        display:flex; 
-                        align-items:center; 
-                        gap:14px;
-                        ${unlocked ? `
-                            box-shadow: 0 0 15px #ff69b4,
-                                        0 0 25px #ff4d94,
-                                        0 0 35px rgba(255,105,180,0.4);
-                            border: 1px solid #ff69b4;
-                        ` : ''}">
+          html += `
+            <div onclick="${isUnlocked ? `openCGZoom('${cg.img}')` : ''}" 
+                 style="cursor: ${isUnlocked ? 'pointer' : 'default'}; border-radius:12px; overflow:hidden; background:#111; position:relative;">
                 
-                <img src="${ach.icon}" 
-                     style="width:48px; height:48px; 
-                            object-fit:contain; 
-                            filter: ${unlocked ? 'none' : 'grayscale(1) brightness(0.6)'}; 
-                            transition: all 0.4s;">
+                <img src="${cg.img}" 
+                     loading="lazy"
+                     style="width:100%; display:block; 
+                            filter: ${isUnlocked ? 'none' : 'blur(12px) brightness(0.5)'}; 
+                            opacity: ${isUnlocked ? '1' : '0.5'};">
                 
-                <div style="flex:1;">
-                    <div style="font-weight:700; color:${unlocked ? '#ff99cc' : '#666'}; 
-                                ${unlocked ? 'text-shadow: 0 0 8px #ff69b4;' : ''}">
-                        ${ach.name}
-                    </div>
-                    <div style="font-size:13.5px; color:#aaa; margin-top:4px;">
-                        ${ach.desc}
-                    </div>
+                <div style="position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent, rgba(0,0,0,0.85)); padding:10px 6px; font-size:13px; text-align:center;">
+                    ${isUnlocked ? cg.name : '？？？'}
                 </div>
-            </div>`;
-    }
-    
-    html += `</div>`;
-    content.innerHTML = html;
-}
-}
+            </div>
+          `;
+         }
 
-function unlockAchievement(key) {
-    if (achievements[key]) return;
-    
-    achievements[key] = true;
-    
-    const ach = ACHIEVEMENT_LIST[key];
-    
-    const notice = document.createElement('div');
-    notice.style.cssText = `
-        position:fixed; 
-        top:80px; 
-        left:50%; 
-        transform:translateX(-50%); 
-        background:linear-gradient(90deg,#ff4d94,#ff8c00); 
-        color:white; 
-        padding:14px 20px; 
-        border-radius:9999px; 
-        font-weight:700; 
-        z-index:99999; 
-        white-space:nowrap; 
-        box-shadow:0 0 25px #ff4d94;
-        display:flex;
-        align-items:center;
-        gap:12px;
-    `;
-    
-    notice.innerHTML = `
-        🏆 成就解鎖！ 
-        <img src="${ach.icon}" style="width:42px; height:42px; vertical-align:middle; border-radius:8px;">
-        <span>${ach.name}</span>
-    `;
-    
-    document.body.appendChild(notice);
-    setTimeout(() => notice.remove(), 2800);
-    
-    log(`🏆 成就解鎖：${ach.name}`);
-}
+          html += `</div>`;
 
+            document.getElementById('modal-title').innerHTML = "";
+            document.getElementById('modal-result').innerHTML = html;
+            document.getElementById('modal').style.display = 'flex';
+        }
 
         // 新增關閉 modal 的函式
         function closeModal() {
