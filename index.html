@@ -652,6 +652,8 @@ if (birthCount >= 10) unlockAchievement('tenMother');
             hasCancer = true;      // ← 關鍵：標記癌症狀態
             unlockCG('cancer');
 
+unlockAchievement('cancerWitness');
+
             const img = document.getElementById('cgImage');
             img.src = CG_LIST.cancer.img;
             img.style.display = 'block';
