@@ -232,13 +232,13 @@
             <h2 style="color:#fff; margin-bottom:16px;">❤️轟炎司懷孕了❤️</h2>
             <img id="cgImage" style="width:100%; border-radius:12px; margin-bottom:12px; display:none;">
             <div id="pregnantText" style="font-size:16px; line-height:1.7; margin:20px 0; color:#fff;"></div>
-            <div style="margin:25px 0;">
-              <div id="choiceArea" style="margin:25px 0;">
+            <div id="eventButtons"></div>
+            <div id="choiceArea" style="margin:25px 0;">
                 <button onclick="chooseBirth(true)" class="choice-btn">生下來</button>
                 <button onclick="chooseBirth(false)" class="choice-btn">墮掉</button>
-              </div>  
-            </div>
+            </div>  
             <button onclick="restartGame()" class="restart" style="background:#fff; color:#ff4d94;">🔄 再來一局</button>
+        </div>
         </div>
     </div>
     <div id="cgZoom" onclick="closeCGZoom()" style="
@@ -272,7 +272,8 @@
         let cgUnlocked = {
             pregnant: false,
             birth: false,
-            abort: false
+            abort: false,
+            lamp_notebook: false
         };//解鎖狀態
         let popSound; 
         
@@ -289,31 +290,31 @@ const ACHIEVEMENT_LIST = {
     firstPregnant: { 
         name: "初次受孕", 
         desc: "讓炎司第一次懷上你的孩子", 
-        icon: "ach_first.PNG",           // ← 改成圖片檔名
+        icon: "ach_first.png",           // ← 改成圖片檔名
         size: 48                 // 可選：圖片大小(px)
     },
     threeChildren: { 
         name: "三子之父", 
         desc: "讓炎司生下三胎", 
-        icon: "ach_three.PNG", 
+        icon: "ach_three.png", 
         size: 52
     },
     tenMother: { 
         name: "十胎母親", 
         desc: "讓炎司生下十胎以上", 
-        icon: "ach_ten.PNG", 
+        icon: "ach_ten.png", 
         size: 54
     },
     intrudeWitness: { 
         name: "隨地便溺", 
         desc: "被焦凍看見炎司失禁的模樣", 
-        icon: "ach_intrude.PNG", 
+        icon: "ach_intrude.png", 
         size: 48
     },
     cancerWitness: { 
         name: "蛋蛋殺手", 
         desc: "炎司罹患睪丸癌，割掉才能康復", 
-        icon: "ach_cancer.PNG", 
+        icon: "ach_cancer.png", 
         size: 48
     }
 };
@@ -377,7 +378,10 @@ const ACHIEVEMENT_LIST = {
             intrude: {
                name: "失💓禁💓高💓潮💓",
                img: "cg_intrude.PNG"
-            }
+            },
+            lamp_notebook: {
+               name: "粉色筆記本",
+               img: "lamp_notebook.PNG"}
         };
 
         function log(html) {
@@ -561,6 +565,7 @@ const ACHIEVEMENT_LIST = {
         function chooseBirth(isBirth) {
             const textEl = document.getElementById('pregnantText');
             const img = document.getElementById('cgImage'); // ⭐ 抓圖片
+            const choiceArea = document.getElementById('choiceArea');
             if (isBirth) {
               
                 birthCount++; // 每次生下來就 +1
@@ -578,6 +583,26 @@ const ACHIEVEMENT_LIST = {
                         // 更新生胎記錄
                 updateBirthRecord();
                 
+        // ==================== 成就解鎖 ====================
+        if (birthCount === 1) unlockAchievement('firstPregnant');
+        if (birthCount === 3) unlockAchievement('threeChildren');
+        if (birthCount >= 10) unlockAchievement('tenMother');
+        // ============================================
+                
+        // ==================== 第3胎觸發事件 ====================
+        if (birthCount === 3) {
+            // 先顯示生下來畫面
+            document.querySelectorAll('#pregnantModal button.choice-btn').forEach(btn => btn.style.display = 'none');
+            
+            setTimeout(() => {
+                showThreeChildrenEvent();   // 進入互動事件
+            }, 1000);
+            return;
+        }
+        // ====================================================
+
+                
+                
             } else {
                       // ⭐ 解鎖「墮掉」
                 unlockCG('abort');
@@ -593,10 +618,7 @@ const ACHIEVEMENT_LIST = {
 
             }
             
-            if (birthCount === 1) unlockAchievement('firstPregnant');
-if (birthCount === 3) unlockAchievement('threeChildren');
-if (birthCount >= 10) unlockAchievement('tenMother');
-            
+ 
             
             document.querySelectorAll('#pregnantModal button.choice-btn').forEach(btn => btn.style.display = 'none');
         }
@@ -650,8 +672,6 @@ if (birthCount >= 10) unlockAchievement('tenMother');
             gameEnded = true;
             hasCancer = true;      // ← 關鍵：標記癌症狀態
             unlockCG('cancer');
-
-unlockAchievement('cancerWitness');
 
             const img = document.getElementById('cgImage');
             img.src = CG_LIST.cancer.img;
@@ -737,6 +757,147 @@ unlockAchievement('intrudeWitness');
         }
 
 
+function showThreeChildrenEvent() {
+    const modal = document.getElementById('pregnantModal');
+    const title = modal.querySelector('h2');
+    const textEl = document.getElementById('pregnantText');
+    const img = document.getElementById('cgImage');
+
+    title.innerHTML = `📝 燈矢的粉色筆記本`;
+  
+  document.querySelectorAll('.restart')
+    .forEach(btn => btn.style.display = 'none');   
+  document.querySelectorAll('#choiceArea button')
+    .forEach(btn => btn.style.display = 'none');
+    
+    let step = 0;
+
+    // 三張漸進靠近的圖片
+    const notebookImages = [
+        "lamp_notebook.PNG",    // 1: 正常距離
+        "lamp_notebook2.PNG",   // 2: 靠近一些
+        "lamp_notebook3.PNG"    // 3: 非常靠近（壓迫感）
+    ];
+
+    const questions = [
+  {
+        q: "爸爸懷孕時表現得很壓抑，似乎正按著什麼情緒不敢發作。<br><br>這晚我身穿著特別網購來的白袍想和他玩玩心理諮商角色扮演，我準備了三個問題，用有愛心吊墜的原子筆寫在粉色筆記本上。<br><br>我坐在床邊看著在床上正在休養的爸爸第一個問題，我故意睜圓眼睛，裝出可憐兮兮的樣子，語調帶了點委屈悶聲問：<br><br>「老爸……你最近為什麼要兇我？我只是想讓你繼續被我幹大肚子而已……你是不是討厭我了？」",
+        choices: [
+            { text: "我手搭在爸爸結實的胸膛感受他的心跳，也想聽出他試圖說謊時漏跳的那一拍。", reaction: "他說：『對不起，爸爸剛剛太累了，不是故意兇你的。』炎司紅著臉，把我用力抱進他寬厚的胸膛，大手輕拍我的背，聲音低啞帶著愧疚。" },
+            { text: "我低頭不說話，故意讓眼眶紅紅的，看這個身材魁梧的男人會不會心軟。", reaction: "炎司慌張地用粗壯的手臂把我抱緊，連忙哄我：『沒有、爸爸沒有討厭你！』" },
+            { text: "我直接說：『那你今天吼我，是不是不覺得我很煩？』", reaction: "炎司瞬間臉紅到耳根，急忙把我抱得死緊，像怕我跑掉一樣：『不⋯！不是的！』。" }
+        ]
+    },
+    {
+        q: "我繼續問第二個問題，聲音輕輕的，貼在他耳邊：<br><br>「老爸……現在每天看著這三個孩子，你心裡真正的感想是什麼？」",
+        choices: [
+            { text: "你感到幸福嗎？", reaction: "炎司這個肌肉結實的男人紅著臉，低頭喘息著回答：「幸福。但也害怕、我已經停不下來了⋯⋯」" },
+            { text: "你不覺得他們長得很像我小時候的模樣？看到他們的臉會想到我嗎？會覺得自己身為爸爸卻被兒子幹到好下流嗎？", reaction: "炎司羞恥地咬緊牙關，聲音沙啞地說：「會。不管是乖巧的紅髮寶寶、焦慮的半髮色寶寶還是全頭白髮的暴躁寶寶都會讓我想到你⋯⋯」" },
+            { text: "不管你生了幾個孩子，你只屬於我一個人的對吧？", reaction: "炎司這個身材魁梧的男人眼眶發紅，粗重的呼吸噴在我脖子上，輕輕點頭：「……嗯。我只屬於燈矢你一個人的。」" }
+        ]
+    },
+    {
+        q: "最後一個問題，我把筆記本放在一旁，整個人貼在他耳邊問：<br><br>「老爸……如果我現在說，我想讓你繼續被我幹到懷孕……你會怎麼想？」",
+        choices: [
+            { text: "你是不是……已經開始期待被我弄大了？", reaction: "炎司全身發抖，這個肌肉緊實的男人紅著臉喘息。" },
+            { text: "你會接受，因為怕我哪天不要你了嗎？", reaction: "炎司終於忍不住用粗壯的手臂主動抱緊我，聲音沙啞地說：「我怕……我怕你離開我……」" },
+            { text: "你是不是……已經被我操到生上癮了？", reaction: "炎司羞恥得別過臉去，這個身強體壯的男人卻輕輕嗯了一聲，耳朵紅得滴血。" }
+        ]
+    }
+    ];
+
+    function showQuestion() {
+        img.src = notebookImages[step];
+        img.style.display = 'block';
+
+        const q = questions[step];
+        textEl.innerHTML = `
+            <div style="text-align:center; margin:25px 0; font-size:16.5px; line-height:1.75;">
+                ${q.q}
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+${q.choices.map((choice, i) => `
+    <button class="three-choice"
+      data-step="${step}"
+      data-choice="${i}"
+style="
+    background:#fff;
+    color:#ff4d94;
+    padding:18px 16px;
+    border-radius:28px;
+    font-weight:700;
+    font-size:16px;
+    line-height:1.55;
+    border:none;
+    cursor:pointer;
+    text-align:center;
+">
+      ${choice.text}
+    </button>
+`).join('')}
+            </div>
+        `;
+        document.querySelectorAll('.three-choice').forEach(btn => {
+    btn.addEventListener('click', () => {
+
+        const currentStep = Number(btn.dataset.step);
+        const choiceIndex = Number(btn.dataset.choice);
+
+        handleThreeChoice(currentStep, choiceIndex);
+    });
+});
+    }
+
+    function handleThreeChoice(currentStep, choiceIndex) {
+        const choice = questions[currentStep].choices[choiceIndex];
+        
+        textEl.innerHTML = `
+            <div style="margin:40px 0; font-size:17px; line-height:1.8; color:#fff; text-align:center;">
+                ${choice.reaction}
+            </div>
+        `;
+
+        // 2秒後自動進入下一題
+        setTimeout(() => {
+            if (currentStep < questions.length - 1) {
+                step++;
+                showQuestion();
+            } else {
+                // ⭐ 顯示 restart 按鈕
+               document.querySelectorAll('.restart')
+                 .forEach(btn => btn.style.display = 'block');
+    
+                // 事件結束
+                 textEl.innerHTML = `
+
+        <div style="text-align:center; margin:35px 0; font-size:17px; line-height:1.85; color:#fff;">
+            我把筆記本扔到一旁，直接壓到老爸身上，用膝蓋頂開他粗壯結實的大腿，把這個身材魁梧的男人牢牢壓在身下。<br><br>
+            
+            我大力揉捏他因為懷孕而腫脹敏感的胸肌，指尖用力擠壓那兩顆又紅又硬的乳頭，乳汁立刻像噴泉一樣狂噴出來，灑得我們滿身都是。<br><br>
+            
+            炎司悶哼一聲，強壯的胸膛卻主動挺向我，任我玩弄。<br><br>
+            
+            我翻過他的身體，狠狠一巴掌又一巴掌打在他厚實的屁股上，打得又紅又熱。<br>
+            炎司咬緊牙關，卻把屁股抬得更高，像在求我繼續。<br><br>
+            
+            最後，我伸手從後面捏住他濕熱不堪的後穴，用手指用力撐開，慢慢往裡面探，感受裡面滾燙的收縮與淫水。<br><br>
+            
+            炎司全身劇烈顫抖，強壯的背脊弓起，卻把後穴主動往我的手指上套弄。<br><br>
+            
+            我低頭看著這個曾經威嚴的繁殖癖壯漢，現在卻紅著臉、主動抬著屁股求我繼續玩弄他，不禁勾起嘴角。
+        </div>
+
+        
+               `;
+                 unlockCG('lamp_notebook');
+             }
+        }, 2000);
+    };
+
+    showQuestion();
+}
+
+
         function playerUseSkill(i) {
             if (gameEnded || pCooldown[i] > 0 || pHP < playerSkills[i].cost) return;
            
@@ -797,6 +958,8 @@ unlockAchievement('intrudeWitness');
             
             document.getElementById('modal').style.display = 'none';
             document.getElementById('pregnantModal').style.display = 'none';
+            document.querySelector('.restart').style.display = 'block';
+            document.getElementById('eventButtons').innerHTML = '';
             updateBars();
             renderSkills();
             log(`<strong style="color:#ff8c00">第1回合開始！連續勝利 ${winStreak}/${WIN_STREAK_REQUIRED}</strong>`);
