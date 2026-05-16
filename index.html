@@ -816,14 +816,25 @@ function showThreeChildrenEvent() {
                 ${q.q}
             </div>
             <div style="display:flex; flex-direction:column; gap:10px;">
-                ${q.choices.map((choice, i) => `
-                    <button class="three-choice"
-                      data-step="${step}"
-                      data-choice="${i}"
-                    style="background:#fff; color:#ff4d94; padding:15px; border-radius:9999px; font-weight:700; border:none; cursor:pointer;">
-                      ${choice.text}
-                    </button>
-                `).join('')}
+${q.choices.map((choice, i) => `
+    <button class="three-choice"
+      data-step="${step}"
+      data-choice="${i}"
+style="
+    background:#fff;
+    color:#ff4d94;
+    padding:18px 16px;
+    border-radius:28px;
+    font-weight:700;
+    font-size:16px;
+    line-height:1.55;
+    border:none;
+    cursor:pointer;
+    text-align:center;
+">
+      ${choice.text}
+    </button>
+`).join('')}
             </div>
         `;
         document.querySelectorAll('.three-choice').forEach(btn => {
