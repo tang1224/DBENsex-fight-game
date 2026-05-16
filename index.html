@@ -1,3 +1,5 @@
+生三個
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -797,11 +799,11 @@ function showThreeChildrenEvent() {
         ]
     },
     {
-        q: "最後一個問題，我把筆記本放在一旁，整個人貼在他耳邊問：<br><br>「老爸……如果我現在說，我想讓你繼續被我幹到懷孕……你會怎麼想？」",
+        q: "最後一個問題，我把筆記本放在一旁，整個人貼在他耳邊問：<br><br>「老爸……如果我現在說，我想讓你繼續生第四胎……你會怎麼想？」",
         choices: [
             { text: "你是不是……已經開始期待被我弄大了？", reaction: "炎司全身發抖，這個肌肉緊實的男人紅著臉喘息。" },
             { text: "你會接受，因為怕我哪天不要你了嗎？", reaction: "炎司終於忍不住用粗壯的手臂主動抱緊我，聲音沙啞地說：「我怕……我怕你離開我……」" },
-            { text: "你是不是……已經被我操到生上癮了？", reaction: "炎司羞恥得別過臉去，這個身強體壯的男人卻輕輕嗯了一聲，耳朵紅得滴血。" }
+            { text: "你是不是……已經被我操到生上癮了？", reaction: "炎司羞恥得別過臉去，這個身強體壯的男人耳朵紅得滴血。" }
         ]
     }
     ];
@@ -816,25 +818,14 @@ function showThreeChildrenEvent() {
                 ${q.q}
             </div>
             <div style="display:flex; flex-direction:column; gap:10px;">
-${q.choices.map((choice, i) => `
-    <button class="three-choice"
-      data-step="${step}"
-      data-choice="${i}"
-style="
-    background:#fff;
-    color:#ff4d94;
-    padding:18px 16px;
-    border-radius:28px;
-    font-weight:700;
-    font-size:16px;
-    line-height:1.55;
-    border:none;
-    cursor:pointer;
-    text-align:center;
-">
-      ${choice.text}
-    </button>
-`).join('')}
+                ${q.choices.map((choice, i) => `
+                    <button class="three-choice"
+                      data-step="${step}"
+                      data-choice="${i}"
+                    style="background:#fff; color:#ff4d94; padding:15px; border-radius:9999px; font-weight:700; border:none; cursor:pointer;">
+                      ${choice.text}
+                    </button>
+                `).join('')}
             </div>
         `;
         document.querySelectorAll('.three-choice').forEach(btn => {
